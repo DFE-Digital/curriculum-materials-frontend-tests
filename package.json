@@ -1,0 +1,14 @@
+{
+  "name": "def_curruiculum_materials",
+  "version": "1.0.0",
+  "description": "Cypress test for Curriculum Materials Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sushant Kumar",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^3.8.3"
+  }
+}
