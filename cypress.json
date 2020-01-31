@@ -1,4 +1,6 @@
 {
+    "defaultCommandTimeout": 50000,
+    "pageLoadTimeout": 30000,
     "env": 
     {
         "url": "dfe-curriculum-materials.herokuapp.com/"
