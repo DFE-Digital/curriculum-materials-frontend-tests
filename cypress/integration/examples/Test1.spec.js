@@ -50,11 +50,15 @@ it('Validate the user is able to navigate to How the service works page',functio
         homePage.getStartButton().click()
         servicePage.getServiceDetailsPageHeader().should('have.text',this.data.sevicedetailsPageHeader)    
         servicePage.getContinueButton().should('have.text',this.data.continueButtonText)
-
             
         })
 
-
-       
+        it('Validate the user is able to view the How the service works page content',function() {    
+    
+         const servicePage=new SeviceDetailsPage()
+         servicePage.getPageContentofHowServiceWorkPage().should('have.text','Access your school’s curriculum online is a service for teachers. It enables\nthem to access their school’s curriculum, including all lessons and their\naccompanying resources.')
+         .next().should('have.text','The Department for Education has collaborated with educational experts\nand cultural institutions to develop a knowledge-rich curriculum and\nservice that aims to enhance the quality of learning in schools and\nreduce teacher workloads.')
+             
+         })       
 
 })

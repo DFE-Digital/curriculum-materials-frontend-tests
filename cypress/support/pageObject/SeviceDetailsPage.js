@@ -13,5 +13,10 @@ getBackButton()
 {
     return cy.get('.govuk-back-link')
 }
+getPageContentofHowServiceWorkPage()
+{
+    return cy.get('.govuk-splash > :nth-child(2)')
+}
+
 }
 export default SeviceDetailsPage;
