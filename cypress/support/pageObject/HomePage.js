@@ -20,6 +20,10 @@ getStartButton()
 {
   return  cy.get('a.govuk-button.govuk-button')
 }
+getBeforYouStartText()
+{
+  return  cy.get('div.govuk-grid-column-two-thirds>h3')
+}
 }
 
 export default HomePage;

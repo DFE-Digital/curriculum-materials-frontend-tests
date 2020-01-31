@@ -20,6 +20,17 @@ it('Validate the user is able to launch curriculum material initial page',functi
    
 })
 
+it('Validate the user is able to see Before you start message on home page',function() {    
+    
+   const homePage=new HomePage()
+   homePage.getBeforYouStartText().should('have.text','Before you start')
+   cy.get('.govuk-grid-column-two-thirds > :nth-child(13)').should('have.text','Your school can use this service if it is:')
+   cy.get(':nth-child(14) > :nth-child(1)').should('have.text','maintained or local authority funded')
+   cy.get(':nth-child(14) > :nth-child(2)').should('have.text','an academy or academy trust')
+   cy.get(':nth-child(14) > :nth-child(3)').should('have.text','a free school')
+             
+   })
+
 it('Validate the user is able to navigate to How the service works page',function() {    
     const homePage=new HomePage()
     homePage.getStartButton().click()
@@ -41,5 +52,8 @@ it('Validate the user is able to navigate to How the service works page',functio
 
             
         })
+
+
+       
 
 })
