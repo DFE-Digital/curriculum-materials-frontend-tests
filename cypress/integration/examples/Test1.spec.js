@@ -1,6 +1,8 @@
 /// <reference types="Cypress" />
 import HomePage from '../../support/pageObject/HomePage'
 import SeviceDetailsPage from '../../support/pageObject/SeviceDetailsPage'
+import YeargroupOptionSelectPage from '../../support/pageObject/YeargroupOptionSelectPage'
+import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
 describe('Validate user is able to view curriculum material', function() 
 {
      this.beforeEach(function() {
@@ -59,6 +61,41 @@ it('Validate the user is able to navigate to How the service works page',functio
          servicePage.getPageContentofHowServiceWorkPage().should('have.text',this.data.servicePageContent1)
          .next().should('have.text',this.data.servicePageContent2)
              
-         })       
+         })  
+         
+         
+         it('Validate the user is able to navigate to year group page and able to view option to select key stage',function() {    
+    
+            const servicePage=new SeviceDetailsPage()
+            servicePage.getContinueButton().click()
+
+            /*const yeargroupOptionSelectPage=new YeargroupOptionSelectPage()
+            yeargroupOptionSelectPage.getYearGroupSelectPageHeader().should('have.text',"Which year group would you like to view?")
+            yeargroupOptionSelectPage.getYearGroupSelectDescription().should('have.text',"Select a year group to view its full geography curriculum, access\nresources, and plan lessons.")
+            yeargroupOptionSelectPage.getKeyStageHeader().should('have.text',"Key stage 3 geography")
+            var*/
+
+         })
+
+         it('Validate the user is able to navigate to Year 7 Geography page',function() {    
+    
+            const servicePage=new SeviceDetailsPage()
+            servicePage.getContinueButton().click()
+
+            const year7GeographyPage=new Year7GeographyPage()
+            year7GeographyPage.getPageName().should('have.text',"Year 7 Geography")
+           
+            })
+            
+            it('Validate the user is able to view page descriptions for Year 7 Geography page',function() {    
+    
+               const servicePage=new SeviceDetailsPage()
+               const year7GeographyPage=new Year7GeographyPage()
+               cy.get(':nth-child(2) > .govuk-heading-m').should('have.text',"What is covered in TODO!!")
+               cy.get('#main-content > :nth-child(2) > p').should('have.text',"A unit focused on the physical processes that create and destroy our landscape - and their effects on humans.")
+              
+               })
+         
+         
 
 })
