@@ -69,11 +69,11 @@ it('Validate the user is able to navigate to How the service works page',functio
             const servicePage=new SeviceDetailsPage()
             servicePage.getContinueButton().click()
 
-            /*const yeargroupOptionSelectPage=new YeargroupOptionSelectPage()
+            const yeargroupOptionSelectPage=new YeargroupOptionSelectPage()
             yeargroupOptionSelectPage.getYearGroupSelectPageHeader().should('have.text',"Which year group would you like to view?")
             yeargroupOptionSelectPage.getYearGroupSelectDescription().should('have.text',"Select a year group to view its full geography curriculum, access\nresources, and plan lessons.")
             yeargroupOptionSelectPage.getKeyStageHeader().should('have.text',"Key stage 3 geography")
-            var*/
+            
 
          })
 
@@ -93,8 +93,16 @@ it('Validate the user is able to navigate to How the service works page',functio
                const year7GeographyPage=new Year7GeographyPage()
                cy.get(':nth-child(2) > .govuk-heading-m').should('have.text',"What is covered in TODO!!")
                cy.get('#main-content > :nth-child(2) > p').should('have.text',"A unit focused on the physical processes that create and destroy our landscape - and their effects on humans.")
-              
                })
+               
+
+               it('Validate the user is able to view lessons header ',function(){
+                  const year7GeographyPage=new Year7GeographyPage()
+                  year7GeographyPage.getLessonHeader().each(($el, index, $list) => {
+                     const lessonHeaderText=$el.text()
+                     cy.log(lessonHeaderText)                     
+                     })
+                  })
          
          
 
