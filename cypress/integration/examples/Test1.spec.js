@@ -64,7 +64,7 @@ it('Validate the user is able to navigate to How the service works page',functio
          })  
          
          
-         it('Validate the user is able to navigate to year group page and able to view option to select key stage',function() {    
+         /*it('Validate the user is able to navigate to year group page and able to view option to select key stage',function() {    
     
             const servicePage=new SeviceDetailsPage()
             servicePage.getContinueButton().click()
@@ -75,7 +75,7 @@ it('Validate the user is able to navigate to How the service works page',functio
             yeargroupOptionSelectPage.getKeyStageHeader().should('have.text',"Key stage 3 geography")
             
 
-         })
+         })*/
 
          it('Validate the user is able to navigate to Year 7 Geography page',function() {    
     
@@ -97,11 +97,15 @@ it('Validate the user is able to navigate to How the service works page',functio
                
 
                it('Validate the user is able to view lessons header ',function(){
+                  var actualgeographyLessonHeader = []
                   const year7GeographyPage=new Year7GeographyPage()
                   year7GeographyPage.getLessonHeader().each(($el, index, $list) => {
-                     const lessonHeaderText=$el.text()
-                     cy.log(lessonHeaderText)                     
-                     })
+                  const lessonHeaderText=$el.text()
+                  actualgeographyLessonHeader.splice(index,lessonHeaderText)
+                  cy.log(actualgeographyLessonHeader.length) 
+                  cy.log(actualgeographyLessonHeader[index])                  
+                  })  
+                  cy.log(actualgeographyLessonHeader.length)                          
                   })
          
          
