@@ -7,7 +7,8 @@ getServiceDetailsPageHeader()
 }
 getContinueButton()
 {
-    return cy.get('.govuk-button')
+    //return cy.get('.govuk-button')
+    return cy.contains('Continue')
 }
 getBackButton()
 {
@@ -17,6 +18,5 @@ getPageContentofHowServiceWorkPage()
 {
     return cy.get('.govuk-splash > :nth-child(2)')
 }
-
 }
 export default SeviceDetailsPage;
