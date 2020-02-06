@@ -9,6 +9,9 @@
   "geographyLessonHeader": ["Earthquake damage","Map skills","Earthquakes","Plate tectonics","Types of volcano"],
   "keyStagePageHeaher":"Which year group would you like to view?",
   "keyStagePageSubHeader":"Select a year group to view its full geography curriculum, access\nresources, and plan lessons.",
-  "keyStageFieldStage":"Key stage 3 geography"
-
+  "keyStageFieldSetHeader":"Key stage 3 geography",
+  "geographyBenefitslearningMessage" :"A unit focused on the physical processes that create and destroy our landscape - and their effects on humans.The lessons in this unit have been planned progressively to enable pupils\nto retain powerful knowledge and vocabulary that can be used confidently\nlater in life. Progressively planned learning enables children to apply\nprior knowledge and build upon it. This approach solidifies learning\nbeyond learning facts in the classroom, allowing knowledge to be stored\nin pupils’ long-term memories.",
+  "geographyPageName":"Year 7 Geography",
+  "logOutMessage":"You have logged out",
+  "invitationMessage":"You need an invitation to use the curriculum materials service"
 }

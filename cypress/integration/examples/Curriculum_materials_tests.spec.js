@@ -3,6 +3,8 @@ import HomePage from '../../support/pageObject/HomePage'
 import SeviceDetailsPage from '../../support/pageObject/SeviceDetailsPage'
 import KeyStagePage from '../../support/pageObject/KeyStagePage'
 import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
+import LogoutPage from '../../support/pageObject/LogoutPage'
+
 describe('Validate user is able to view curriculum material', function () {
    this.beforeEach(function () {
       cy.fixture('example').then(function (data) {
@@ -41,29 +43,27 @@ describe('Validate user is able to view curriculum material', function () {
    })
 
    it('Validate the user is able to navigate previous page if he click on Back button', function () {
-
+      cy.visit(Cypress.env('url'))
+      const homePage = new HomePage()
+      homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getBackButton().click()
-      const homePage = new HomePage()
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
-      homePage.getStartButton().click()
-      servicePage.getServiceDetailsPageHeader().should('have.text', this.data.sevicedetailsPageHeader)
-      servicePage.getContinueButton().should('have.text', this.data.continueButtonText)
-
    })
-
    it('Validate the user is able to view the How the service works page content', function () {
-
+      cy.visit(Cypress.env('url'))
+      const homePage = new HomePage()
+      homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
          .next().should('have.text', this.data.servicePageContent2)
 
    })
-
-
    it('Validate the user is able to navigate to key stage page and able to view option to select key stage', function () {
-
+      cy.visit(Cypress.env('url'))
+      const homePage = new HomePage()
+      homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
       const keyStagePage = new KeyStagePage()
@@ -72,25 +72,21 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
    })
 
-   it('Validate the user is able to select the desired option on key stage and able navigate to next page post clicking on continue button', function () {
-
+   it('Validate the user is able to select the desired option on key stage page and able navigate to next page post clicking on continue button', function () {
+      cy.visit(Cypress.env('url'))
+      const homePage = new HomePage()
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-
-   })
-
-   it('Validate the user is able to navigate to Year 7 Geography page', function () {
-
-      //const servicePage = new SeviceDetailsPage()
-      //servicePage.getContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getPageName().should('have.text', "Year 7 Geography")
-
+      year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
+      
    })
 
    it('Validate the user is able to view page descriptions for Year 7 Geography page', function () {
-
       const servicePage = new SeviceDetailsPage()
       const year7GeographyPage = new Year7GeographyPage()
       cy.get(':nth-child(2) > .govuk-heading-m').should('have.text', "What is covered in TODO!!")
@@ -104,15 +100,53 @@ describe('Validate user is able to view curriculum material', function () {
          cy.log(lessonHeaderText)
       })
    })
-   // Below test is validating the number which is associated with lesson header/unit should match with number of lessons
-   it('Validate the user is able to view the lessons and lesson count shold be match', function () {
+   it('Validate the lesson count at header is matching with lesson count at footer', function () {
+      var $lessoncount = 0
+      var $lessoncountatfooter = 0
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getLessonHeader().each(($el, index, $list) => {
-         const lessonHeaderText = $el.text()
-         cy.log(lessonHeaderText)
+         cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title a:nth-child(1) > h3:nth-child(1)').then(function ($lessonHeader) {
+            cy.log($lessonHeader.text())
+            cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title > span.govuk-caption-m:nth-child(2)').then(function ($lessonCount) {
+               cy.log($lessonCount.text())
+               var count = $lessonCount.text().split(' ')[0]
+               $lessoncount = Number(count)
+               cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li').each(($el, index, list) => {
+
+                  cy.log(index + 1 + '=' + $el.text())
+                  if ((index + 1) == list.length) {
+                     $lessoncountatfooter = list.length
+                     cy.log('Lesson count at header = ' + $lessoncount)
+                     cy.log('Lesson  count at footer = ' + $lessoncountatfooter)
+                     expect($lessoncountatfooter == $lessoncount).to.be.true
+                  }
+               })
+            })
+         })
       })
+      
    })
 
-
-
+   it('Validate the user is able to logout from the system', function () {
+      
+      cy.visit(Cypress.env('url'))
+      const homePage = new HomePage()
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
+      const logoutPage = new LogoutPage()
+      logoutPage.getLogoutButton().click()
+      logoutPage.getLogoutMessage().should('have.text',this.data.logOutMessage)
+      cy.visit(Cypress.env('url_old'))
+      logoutPage.getLogoutMessage().should('have.text',this.data.invitationMessage)
+      cy.get('#main-content > :nth-child(2)').should('have.text','If you have an invite, follow the link in your invitation email.')
+      .next().should('have.text','Contact us if you haven\'t been invited or the link isn\'t working.')
+      cy.get('.govuk-link').should('have.text','curriculum-materials@digital.education.gov.uk') 
+      
+   })
 })
