@@ -6,36 +6,31 @@ import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
 import LogoutPage from '../../support/pageObject/LogoutPage'
 
 describe('Validate user is able to view curriculum material', function () {
+   
+   const homePage = new HomePage()
    this.beforeEach(function () {
       cy.fixture('example').then(function (data) {
          this.data = data
       })
    })
 
-
    it('Validate the user is able to launch curriculum material initial page', function () {
-      cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
+      cy.visit(Cypress.env('url'))     
       homePage.getPageName().should('have.text', this.data.pageName)
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
-
    })
 
    it('Validate the user is able to see Before you start message on home page', function () {
-
-      const homePage = new HomePage()
       homePage.getBeforYouStartText().should('have.text', 'Before you start')
       cy.get('.govuk-grid-column-two-thirds > :nth-child(13)').should('have.text', 'Your school can use this service if it is:')
       cy.get(':nth-child(14) > :nth-child(1)')
          .first().should('have.text', 'maintained or local authority funded')
          .next().should('have.text', 'an academy or academy trust')
          .next().should('have.text', 'a free school')
-
    })
 
    it('Validate the user is able to navigate to How the service works page', function () {
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getServiceDetailsPageHeader().should('have.text', this.data.sevicedetailsPageHeader)
@@ -44,7 +39,6 @@ describe('Validate user is able to view curriculum material', function () {
 
    it('Validate the user is able to navigate previous page if he click on Back button', function () {
       cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getBackButton().click()
@@ -53,7 +47,6 @@ describe('Validate user is able to view curriculum material', function () {
    })
    it('Validate the user is able to view the How the service works page content', function () {
       cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
@@ -62,7 +55,6 @@ describe('Validate user is able to view curriculum material', function () {
    })
    it('Validate the user is able to navigate to key stage page and able to view option to select key stage', function () {
       cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -74,7 +66,6 @@ describe('Validate user is able to view curriculum material', function () {
 
    it('Validate the user is able to select the desired option on key stage page and able navigate to next page post clicking on continue button', function () {
       cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -130,7 +121,6 @@ describe('Validate user is able to view curriculum material', function () {
    it('Validate the user is able to logout from the system', function () {
       
       cy.visit(Cypress.env('url'))
-      const homePage = new HomePage()
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -142,11 +132,15 @@ describe('Validate user is able to view curriculum material', function () {
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutButton().click()
       logoutPage.getLogoutMessage().should('have.text',this.data.logOutMessage)
+
+   })
+
+   it('Validate the user is able to view the invitation page and it\'s content', function () {
       cy.visit(Cypress.env('url_old'))
+      const logoutPage = new LogoutPage()
       logoutPage.getLogoutMessage().should('have.text',this.data.invitationMessage)
       cy.get('#main-content > :nth-child(2)').should('have.text','If you have an invite, follow the link in your invitation email.')
       .next().should('have.text','Contact us if you haven\'t been invited or the link isn\'t working.')
       cy.get('.govuk-link').should('have.text','curriculum-materials@digital.education.gov.uk') 
-      
-   })
+   })       
 })
