@@ -1,5 +1,4 @@
 class KeyStagePage {
-
     getKeyStagePageHeader() {
         return cy.get('.govuk-heading-l')
     }
