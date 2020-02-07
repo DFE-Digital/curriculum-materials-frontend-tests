@@ -6,7 +6,7 @@ import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
 import LogoutPage from '../../support/pageObject/LogoutPage'
 
 describe('Validate user is able to view curriculum material', function () {
-   
+
    const homePage = new HomePage()
    this.beforeEach(function () {
       cy.fixture('example').then(function (data) {
@@ -15,7 +15,7 @@ describe('Validate user is able to view curriculum material', function () {
    })
 
    it('Validate the user is able to launch curriculum material initial page', function () {
-      cy.visit(Cypress.env('url'))     
+      cy.visit(Cypress.env('url'))
       homePage.getPageName().should('have.text', this.data.pageName)
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
@@ -64,6 +64,36 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
    })
 
+
+   it('Validate the system is not allowing user to navigate to next page without selecting year radio button ', function () {
+      var flag=false
+      cy.visit(Cypress.env('url'))
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStagePageHeader().should('have.text', this.data.keyStagePageHeaher)
+      keyStagePage.getKeyStageContinueButton().click()      
+      const year7GeographyPage = new Year7GeographyPage()
+      try {
+         flag = false
+         year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
+      }
+      catch (err) {
+
+         flag = true
+      }
+
+      if (flag) {
+         expect(flag==true).to.be.equal(true)
+         
+      }
+      else {
+         expect(flag==false).to.be.equal(false)
+      }
+
+   })
+
    it('Validate the user is able to select the desired option on key stage page and able navigate to next page post clicking on continue button', function () {
       cy.visit(Cypress.env('url'))
       homePage.getStartButton().click()
@@ -74,7 +104,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
-      
+
    })
 
    it('Validate the user is able to view page descriptions for Year 7 Geography page', function () {
@@ -115,11 +145,11 @@ describe('Validate user is able to view curriculum material', function () {
             })
          })
       })
-      
+
    })
 
    it('Validate the user is able to logout from the system', function () {
-      
+
       cy.visit(Cypress.env('url'))
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
@@ -131,16 +161,16 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutButton().click()
-      logoutPage.getLogoutMessage().should('have.text',this.data.logOutMessage)
+      logoutPage.getLogoutMessage().should('have.text', this.data.logOutMessage)
 
    })
 
    it('Validate the user is able to view the invitation page and it\'s content', function () {
       cy.visit(Cypress.env('url_old'))
       const logoutPage = new LogoutPage()
-      logoutPage.getLogoutMessage().should('have.text',this.data.invitationMessage)
-      cy.get('#main-content > :nth-child(2)').should('have.text','If you have an invite, follow the link in your invitation email.')
-      .next().should('have.text','Contact us if you haven\'t been invited or the link isn\'t working.')
-      cy.get('.govuk-link').should('have.text','curriculum-materials@digital.education.gov.uk') 
-   })       
+      logoutPage.getLogoutMessage().should('have.text', this.data.invitationMessage)
+      cy.get('#main-content > :nth-child(2)').should('have.text', 'If you have an invite, follow the link in your invitation email.')
+         .next().should('have.text', 'Contact us if you haven\'t been invited or the link isn\'t working.')
+      cy.get('.govuk-link').should('have.text', 'curriculum-materials@digital.education.gov.uk')
+   })
 })

@@ -14,4 +14,5 @@ class Year7GeographyPage {
 //article.card >div.card-body >ul >li :  
 //article.card:nth-child(1) div.card-body > ul:nth-child(2) >li : to get the lesson name
 //article.card:nth-child(5) div.card-header div.card-header-title > span.govuk-caption-m:nth-child(2) : lesson count
+//article.card:nth-child(3) >div.card-footer: gives the link associated with each lesson units
 export default Year7GeographyPage;
