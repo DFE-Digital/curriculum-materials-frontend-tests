@@ -1,3 +1,4 @@
+/// <reference types="Cypress" />
 import HomePage from '../../support/pageObject/HomePage'
 import SeviceDetailsPage from '../../support/pageObject/SeviceDetailsPage'
 import KeyStagePage from '../../support/pageObject/KeyStagePage'
@@ -148,6 +149,47 @@ describe('Validate user is able to view curriculum material', function () {
 
    })
 
+   it('Validate the user is able to view "View and plan lessons" link associated to with each unit', function () {
+      var $lessoncount = 0
+      var $lessoncountatfooter = 0
+      const year7GeographyPage = new Year7GeographyPage()
+      year7GeographyPage.getUnitName().each(($el, index, $list) => {
+         cy.get('article.card:nth-child(' + (index + 1) + ') >div.card-footer').then(function (linkName) {
+            var linktext = linkName.text()
+            cy.log(linktext)
+            expect(linktext).to.have.string('View and plan lessons')
+
+         })
+
+      })
+
+   })
+
+   it('Validate the user is able to navigate to next page once he clicks on "View and plan lessons" link', function () {
+      cy.visit(Cypress.env('url'))
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
+      cy.get(':nth-child(1) > .card-footer > a').click()
+      cy.wait(1000)
+      cy.get('.govuk-heading-l').should('have.text','Earthquake damage')
+      cy.go("back")
+      cy.get(':nth-child(2) > .card-footer > a').click()
+      cy.wait(1000)      
+      cy.get(' h1.govuk-heading-l').should('have.text','Map skills')
+      cy.go("back")
+      cy.get(':nth-child(3) > .card-footer > a').click()
+      cy.wait(1000)
+      cy.get(' h1.govuk-heading-l').should('have.text','Earthquakes')
+      cy.go("back")
+
+   })
+
    it('Validate the user is able to logout from the system', function () {
 
       cy.visit(Cypress.env('url'))
@@ -174,4 +216,10 @@ describe('Validate user is able to view curriculum material', function () {
          .next().should('have.text', this.data.invitationMessageLine2)
       invitationPage.getInvitationLink().should('have.text', this.data.invitationEmail)
    })
+
+
+
+
+
+
 })

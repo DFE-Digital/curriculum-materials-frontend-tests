@@ -8,6 +8,9 @@ class Year7GeographyPage {
     getLessonHeader() {
         return cy.get('h3:nth-child(1)')
     }
+    getUnitName() {
+        return cy.get('article.card >div.card-header > div.card-header-title > a >h3')
+    }
 }
 //article.card >div.card-header > div.card-header-title > a >h3 : list of all lesson header
 //div.card-header-title > span.govuk-caption-m : number of lesson
