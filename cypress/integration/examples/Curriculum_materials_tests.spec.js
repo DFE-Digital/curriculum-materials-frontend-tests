@@ -1,9 +1,9 @@
-/// <reference types="Cypress" />
 import HomePage from '../../support/pageObject/HomePage'
 import SeviceDetailsPage from '../../support/pageObject/SeviceDetailsPage'
 import KeyStagePage from '../../support/pageObject/KeyStagePage'
 import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
 import LogoutPage from '../../support/pageObject/LogoutPage'
+import InvitationPage from '../../support/pageObject/InvitationPage'
 
 describe('Validate user is able to view curriculum material', function () {
 
@@ -66,14 +66,14 @@ describe('Validate user is able to view curriculum material', function () {
 
 
    it('Validate the system is not allowing user to navigate to next page without selecting year radio button ', function () {
-      var flag=false
+      var flag = false
       cy.visit(Cypress.env('url'))
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStagePageHeader().should('have.text', this.data.keyStagePageHeaher)
-      keyStagePage.getKeyStageContinueButton().click()      
+      keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
       try {
          flag = false
@@ -85,11 +85,11 @@ describe('Validate user is able to view curriculum material', function () {
       }
 
       if (flag) {
-         expect(flag==true).to.be.equal(true)
-         
+         expect(flag == true).to.be.equal(true)
+
       }
       else {
-         expect(flag==false).to.be.equal(false)
+         expect(flag == false).to.be.equal(false)
       }
 
    })
@@ -169,8 +169,9 @@ describe('Validate user is able to view curriculum material', function () {
       cy.visit(Cypress.env('url_old'))
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutMessage().should('have.text', this.data.invitationMessage)
-      cy.get('#main-content > :nth-child(2)').should('have.text', 'If you have an invite, follow the link in your invitation email.')
-         .next().should('have.text', 'Contact us if you haven\'t been invited or the link isn\'t working.')
-      cy.get('.govuk-link').should('have.text', 'curriculum-materials@digital.education.gov.uk')
+      const invitationPage = new InvitationPage()
+      invitationPage.getInvitationPageContent().should('have.text', this.data.invitationMessageLine1)
+         .next().should('have.text', this.data.invitationMessageLine2)
+      invitationPage.getInvitationLink().should('have.text', this.data.invitationEmail)
    })
 })
