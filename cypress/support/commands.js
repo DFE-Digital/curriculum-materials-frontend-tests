@@ -23,3 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("waitUntilPageLoad", (time) => {
+
+    cy.wait(time * 1000)
+
+})
+
+
+Cypress.Commands.add('navigateBack', () => {
+    
+    cy.go("back")
+    
+  })
+
+
+
+
+

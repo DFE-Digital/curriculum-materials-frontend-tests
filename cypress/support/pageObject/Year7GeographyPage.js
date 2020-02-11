@@ -11,6 +11,12 @@ class Year7GeographyPage {
     getUnitName() {
         return cy.get('article.card >div.card-header > div.card-header-title > a >h3')
     }
+    getViewandLessonPlanLink(indexNumber) {
+        return cy.get('article.card:nth-child(' + (indexNumber + 1) + ') >div.card-footer')       
+    }
+    getUnitHeader(){
+        return cy.get('h1.govuk-heading-l')
+    }
 }
 //article.card >div.card-header > div.card-header-title > a >h3 : list of all lesson header
 //div.card-header-title > span.govuk-caption-m : number of lesson

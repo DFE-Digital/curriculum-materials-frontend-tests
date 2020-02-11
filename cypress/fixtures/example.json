@@ -6,7 +6,7 @@
   "continueButtonText": "Continue",
   "servicePageContent1":"Access your school’s curriculum online is a service for teachers. It enables\nthem to access their school’s curriculum, including all lessons and their\naccompanying resources.",
   "servicePageContent2":"The Department for Education has collaborated with educational experts\nand cultural institutions to develop a knowledge-rich curriculum and\nservice that aims to enhance the quality of learning in schools and\nreduce teacher workloads.",
-  "geographyLessonHeader": ["Earthquake damage","Map skills","Earthquakes","Plate tectonics","Types of volcano"],
+  "geographyUnitHeader": ["Earthquake damage","Map skills","Earthquakes","Plate tectonics","Types of volcano"],
   "keyStagePageHeaher":"Which year group would you like to view?",
   "keyStagePageSubHeader":"Select a year group to view its full geography curriculum, access\nresources, and plan lessons.",
   "keyStageFieldSetHeader":"Key stage 3 geography",
