@@ -150,13 +150,10 @@ describe('Validate user is able to view curriculum material', function () {
    })
 
    it('Validate the user is able to view "View and plan lessons" link associated to with each unit', function () {
-      var $lessoncount = 0
-      var $lessoncountatfooter = 0
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getUnitName().each(($el, index, $list) => {
-         cy.get('article.card:nth-child(' + (index + 1) + ') >div.card-footer').then(function (linkName) {
+         year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
             var linktext = linkName.text()
-            cy.log(linktext)
             expect(linktext).to.have.string('View and plan lessons')
 
          })
@@ -174,20 +171,18 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
-      cy.get(':nth-child(1) > .card-footer > a').click()
-      cy.wait(1000)
-      cy.get('.govuk-heading-l').should('have.text','Earthquake damage')
-      cy.go("back")
-      cy.get(':nth-child(2) > .card-footer > a').click()
-      cy.wait(1000)      
-      cy.get(' h1.govuk-heading-l').should('have.text','Map skills')
-      cy.go("back")
-      cy.get(':nth-child(3) > .card-footer > a').click()
-      cy.wait(1000)
-      cy.get(' h1.govuk-heading-l').should('have.text','Earthquakes')
-      cy.go("back")
-
+      year7GeographyPage.getUnitName().each(($el, index, $list) => {
+         year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
+            year7GeographyPage.getViewandLessonPlanLink(index).click()
+            cy.waitUntilPageLoad(0.5)
+            year7GeographyPage.getUnitHeader().then(function (linkName1) {
+               cy.log(linkName1.text())
+               cy.log(this.data.geographyUnitHeader[index])
+               year7GeographyPage.getUnitHeader().should('have.text', this.data.geographyUnitHeader[index])
+            })
+            cy.navigateBack()
+         })
+      })
    })
 
    it('Validate the user is able to logout from the system', function () {
@@ -217,8 +212,52 @@ describe('Validate user is able to view curriculum material', function () {
       invitationPage.getInvitationLink().should('have.text', this.data.invitationEmail)
    })
 
+   it('Validate the user is able to view the "View lesson" link against each lesson for each untit', function () {
+      cy.visit(Cypress.env('url'))
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').click()
+      cy.get('.govuk-heading-l').should('have.text', 'Earthquake damage')
+      cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+         cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)').then(function (linkName) {
+            var learningObjective = linkName.text()
+            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+         })
+      })
+   })
 
-
+   it('Validate the user is able to view the lesson overview page, so that he understand what he can going to teach, and how to teach it', function () {
+      cy.visit(Cypress.env('url'))
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').click()
+      cy.get('.govuk-heading-l').should('have.text', 'Earthquake damage')
+      cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+         cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)').then(function (linkName) {
+            var learningObjective = linkName.text()
+            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
+            cy.get('#tab_lesson-contents').click()
+            cy.waitUntilPageLoad(0.2)
+            cy.get('#lesson-contents > h2').should('have.text','Lesson contents')
+            cy.get('#tab_downloads').click()
+            cy.waitUntilPageLoad(0.2)
+            cy.get('#downloads > h2').should('have.text','Downloads')
+            //cy.navigateBack()
+            cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+         })
+      })
+   })
 
 
 
