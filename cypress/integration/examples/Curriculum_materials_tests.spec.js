@@ -52,8 +52,8 @@ describe('Validate user is able to view curriculum material', function () {
       const servicePage = new SeviceDetailsPage()
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
          .next().should('have.text', this.data.servicePageContent2)
-
    })
+
    it('Validate the user is able to navigate to key stage page and able to view option to select key stage', function () {
       cy.visit(Cypress.env('url'))
       homePage.getStartButton().click()
@@ -64,7 +64,6 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStagePageSubHeader().should('have.text', this.data.keyStagePageSubHeader)
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
    })
-
 
    it('Validate the system is not allowing user to navigate to next page without selecting year radio button ', function () {
       var flag = false
@@ -81,18 +80,14 @@ describe('Validate user is able to view curriculum material', function () {
          year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
       }
       catch (err) {
-
          flag = true
       }
-
       if (flag) {
          expect(flag == true).to.be.equal(true)
-
       }
       else {
          expect(flag == false).to.be.equal(false)
       }
-
    })
 
    it('Validate the user is able to select the desired option on key stage page and able navigate to next page post clicking on continue button', function () {
@@ -105,7 +100,6 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
-
    })
 
    it('Validate the user is able to view page descriptions for Year 7 Geography page', function () {
@@ -122,6 +116,7 @@ describe('Validate user is able to view curriculum material', function () {
          cy.log(lessonHeaderText)
       })
    })
+
    it('Validate the lesson count at header is matching with lesson count at footer', function () {
       var $lessoncount = 0
       var $lessoncountatfooter = 0
@@ -146,7 +141,6 @@ describe('Validate user is able to view curriculum material', function () {
             })
          })
       })
-
    })
 
    it('Validate the user is able to view "View and plan lessons" link associated to with each unit', function () {
@@ -155,13 +149,10 @@ describe('Validate user is able to view curriculum material', function () {
          year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
             var linktext = linkName.text()
             expect(linktext).to.have.string('View and plan lessons')
-
          })
-
       })
-
    })
-
+   
    it('Validate the user is able to navigate to next page once he clicks on "View and plan lessons" link', function () {
       cy.visit(Cypress.env('url'))
       homePage.getStartButton().click()
@@ -199,7 +190,6 @@ describe('Validate user is able to view curriculum material', function () {
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutButton().click()
       logoutPage.getLogoutMessage().should('have.text', this.data.logOutMessage)
-
    })
 
    it('Validate the user is able to view the invitation page and it\'s content', function () {
@@ -249,16 +239,31 @@ describe('Validate user is able to view curriculum material', function () {
             cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
             cy.get('#tab_lesson-contents').click()
             cy.waitUntilPageLoad(0.2)
-            cy.get('#lesson-contents > h2').should('have.text','Lesson contents')
+            cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
             cy.get('#tab_downloads').click()
             cy.waitUntilPageLoad(0.2)
-            cy.get('#downloads > h2').should('have.text','Downloads')
-            //cy.navigateBack()
+            cy.get('#downloads > h2').should('have.text', 'Downloads')
             cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
          })
       })
    })
 
-
-
+   it('Validate the user is able to view and navigate to next page if he clicks the link on lesson overview page', function () {
+      cy.visit(Cypress.env('url'))
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').click()
+      cy.get('.govuk-heading-l').should('have.text', 'Earthquake damage')
+      cy.get('.siblings>ol>li>a').each(($el, index, $list) => {
+         var linkText = $el.text()
+         cy.contains(linkText).click()
+         cy.waitUntilPageLoad(1)
+         cy.get('.govuk-heading-l').should('have.text', linkText)
+      })
+   })
 })
