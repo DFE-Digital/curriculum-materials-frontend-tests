@@ -32,10 +32,10 @@ Cypress.Commands.add("waitUntilPageLoad", (time) => {
 
 
 Cypress.Commands.add('navigateBack', () => {
-    
+
     cy.go("back")
-    
-  })
+
+})
 
 
 

@@ -5,5 +5,7 @@
     "url": "https://dfe-curriculum-materials.herokuapp.com/teachers/session/ff37bd17-42be-47ab-8141-2f5e3b7f2b7f",
     "url_old":"https://dfe-curriculum-materials.herokuapp.com"
   },
-  "projectId": "s9ijuj"
+  "projectId": "s9ijuj",
+  "reporter": "mochawesome"
+
 }
