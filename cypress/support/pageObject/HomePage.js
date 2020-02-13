@@ -12,8 +12,11 @@ class HomePage {
   getStartButton() {
     return cy.get('a.govuk-button.govuk-button')
   }
-  getBeforYouStartText() {
-    return cy.get('div.govuk-grid-column-two-thirds>h3')
+  getBeforYouStartHeader() {
+    return cy.get('.govuk-grid-column-two-thirds > h3')
+  }
+  getBeforStartMessage() {
+    return cy.get('.govuk-grid-column-two-thirds > :nth-child(13)')
   }
 }
 export default HomePage;
