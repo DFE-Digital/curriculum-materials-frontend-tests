@@ -1,6 +1,11 @@
 {
   "pageName": "Curriculum Materials",
   "startButtonName": "Start now",
+  "beforeYouStartHeader": "Before you start",
+  "beforeYouStartMessage":"Your school can use this service if it is:",
+  "beforeYouStartMessage1":"maintained or local authority funded",
+  "beforeYouStartMessage2":"an academy or academy trust",
+  "beforeYouStartMessage3":"a free school",
   "pageHeader": "Access your school’s curriculum online",
   "sevicedetailsPageHeader": "How the service works",
   "continueButtonText": "Continue",
@@ -16,5 +21,6 @@
   "invitationMessage":"You need an invitation to use the curriculum materials service",
   "invitationMessageLine1":"If you have an invite, follow the link in your invitation email.",
   "invitationMessageLine2":"Contact us if you haven't been invited or the link isn't working.",
-  "invitationEmail":"curriculum-materials@digital.education.gov.uk"
+  "invitationEmail":"curriculum-materials@digital.education.gov.uk",
+  "geographyUnit": ["Earthquake damage","Map skills","Earthquakes","Plate tectonics","Types of volcano"]
 }

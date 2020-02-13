@@ -12,7 +12,7 @@ describe('Validate user is able to view curriculum material', function () {
    this.beforeEach(function () {
       cy.visit(Cypress.env('url'))
       cy.fixture('example').then(function (data) {
-         this.data = data
+         this.data = data        
       })
    })
 
@@ -23,12 +23,12 @@ describe('Validate user is able to view curriculum material', function () {
    })
 
    it('Validate the user is able to see Before you start message on home page', function () {
-      homePage.getBeforYouStartText().should('have.text', 'Before you start')
-      cy.get('.govuk-grid-column-two-thirds > :nth-child(13)').should('have.text', 'Your school can use this service if it is:')
+      homePage.getBeforYouStartHeader().should('have.text', this.data.beforeYouStartHeader)
+      homePage.getBeforStartMessage().should('have.text', this.data.beforeYouStartMessage)
       cy.get(':nth-child(14) > :nth-child(1)')
-         .first().should('have.text', 'maintained or local authority funded')
-         .next().should('have.text', 'an academy or academy trust')
-         .next().should('have.text', 'a free school')
+         .first().should('have.text',this.data.beforeYouStartMessage1 )
+         .next().should('have.text',this.data.beforeYouStartMessage2)
+         .next().should('have.text',this.data.beforeYouStartMessage3)
    })
 
    it('Validate the user is able to navigate to How the service works page', function () {
@@ -277,5 +277,34 @@ describe('Validate user is able to view curriculum material', function () {
          cy.waitUntilPageLoad(1)
          cy.get('.govuk-heading-l').should('have.text', linkText)
       })
+   })
+   
+   it('Validate the user is able to view and navigate to next page if he clicks the "View lesson" link', function () {
+      cy.log(this.data.input)
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      const year7GeographyPage = new Year7GeographyPage()
+      cy.get(':nth-child(2) > .card-header > .card-header-title > a > h3').click()
+      cy.get('.govuk-heading-l').should('have.text', 'Map skills')      
+         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
+               var learningObjective = learningobjective.text()
+               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
+               cy.waitUntilPageLoad(1)
+               cy.get('.govuk-heading-l:visible').should('have.text',learningObjective)
+               cy.get('#tab_lesson-contents').click()
+               cy.waitUntilPageLoad(1)
+               cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
+               cy.get('#tab_downloads').click()
+               cy.waitUntilPageLoad(1)
+               cy.get('#downloads > h2').should('have.text', 'Downloads')
+               cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+            })
+         })
    })
 })
