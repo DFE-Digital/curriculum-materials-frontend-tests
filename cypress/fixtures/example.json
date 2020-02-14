@@ -21,6 +21,7 @@
   "invitationMessage":"You need an invitation to use the curriculum materials service",
   "invitationMessageLine1":"If you have an invite, follow the link in your invitation email.",
   "invitationMessageLine2":"Contact us if you haven't been invited or the link isn't working.",
+  "viewLessonPlanLink":"View and plan lessons",
   "invitationEmail":"curriculum-materials@digital.education.gov.uk",
   "geographyUnit": ["Earthquake damage","Map skills","Earthquakes","Plate tectonics","Types of volcano"]
 }

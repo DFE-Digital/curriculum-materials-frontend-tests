@@ -18,5 +18,8 @@ class HomePage {
   getBeforStartMessage() {
     return cy.get('.govuk-grid-column-two-thirds > :nth-child(13)')
   }
+  getBeforStartNextMessage() {
+    return cy.get(':nth-child(14) > :nth-child(1)')
+  }
 }
 export default HomePage;
