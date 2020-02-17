@@ -415,4 +415,47 @@ describe('Validate user is able to view curriculum material', function () {
          })
       })
    })
+
+   it("Validates the user is able to download the lesson plan", function() {
+     homePage.getStartButton().click();
+     const servicePage = new SeviceDetailsPage();
+     servicePage.getContinueButton().click();
+     const keyStagePage = new KeyStagePage();
+     keyStagePage.getKeyStageRadioButton().click();
+     keyStagePage.getKeyStageContinueButton().click();
+     const year7GeographyPage = new Year7GeographyPage();
+     cy.get(
+       ":nth-child(1) > .card-header > .card-header-title > a > h3"
+     ).click();
+     cy.get(".govuk-table__body > :nth-child(1) > :nth-child(4) > a").click();
+     cy.get(":nth-child(3) > .govuk-tabs__tab").click();
+     cy.get(".govuk-list > :nth-child(1) > a").should(
+       "have.attr",
+       "target",
+       "_blank"
+     );
+     cy.get(".govuk-list > :nth-child(1) > a[href").then(function($btn) {
+       cy.visit($btn.prop("href"));
+       cy.get(".govuk-breadcrumbs").should("not.exist");
+       cy.get(".govuk-footer").should("exist");
+       cy.get(".govuk-header").should("not.exist");
+      [("Understand the aims of the lesson", "Lesson contents")].forEach(
+         text => {
+            cy.get(".govuk-grid-column-full h2").should("contain", text);
+         }
+      );
+       [
+         "Core knowledge for teachers",
+         "Vocabulary",
+         "Common misconceptions",
+         "Building on previous knowledge"
+       ].forEach(text => {
+         cy.get(".govuk-grid-column-full .govuk-heading-m").should(
+           "contain",
+           text
+         );
+       });
+       cy.get(".govuk-table.lesson-parts").should('exist');
+     });
+   });
 })
