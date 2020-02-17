@@ -435,7 +435,14 @@ describe('Validate user is able to view curriculum material', function () {
        "_blank"
      );
      cy.get(".govuk-list > :nth-child(1) > a[href").then(function($btn) {
-       cy.visit($btn.prop("href"));
+        cy.visit($btn.prop("href"), {
+           onBeforeLoad(win) {
+            cy.stub(win, 'print')
+          }
+       });
+       cy.window()
+         .its("print")
+         .should("be.called");
        cy.get(".govuk-breadcrumbs").should("not.exist");
        cy.get(".govuk-footer").should("exist");
        cy.get(".govuk-header").should("not.exist");
