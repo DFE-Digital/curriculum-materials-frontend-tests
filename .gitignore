@@ -1,2 +1,10 @@
 node_modules
-debug.log
+*.log
+cypress/screenshots/
+cypress/videos/
+mochawesome-reports/
+mochawesome-report/
+coverage/
+dist/
+*DS_Store
+Test-Execution-Report
