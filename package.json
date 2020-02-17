@@ -2,12 +2,14 @@
   "name": "def_curriculum_materials",
   "version": "1.0.0",
   "description": "Cypress test for Curriculum Materials Project",
+  "repository": "https://github.com/DFE-Digital/curriculum-materials-frontend-tests",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cypress run",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
-  "author": "Sushant Kumar",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "cypress": "^3.8.3",
     "mocha": "^5.2.0",
