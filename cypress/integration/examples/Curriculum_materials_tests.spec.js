@@ -156,15 +156,15 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getLessonHeader().each(($el, index, $list) => {
-         cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title a:nth-child(1) > h3:nth-child(1)').then(function ($lessonHeader) {
+         year7GeographyPage.getLessonsHeader(index).then(function ($lessonHeader) {
             cy.log($lessonHeader.text())
-            cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title > span.govuk-caption-m:nth-child(2)').then(function ($lessonCount) {
+            year7GeographyPage.getLessonCount(index).then(function ($lessonCount) {
                cy.log($lessonCount.text())
                var count = $lessonCount.text().split(' ')[0]
                $lessoncount = Number(count)
-               cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li').each(($el, index, list) => {
-                  cy.log(index + 1 + '=' + $el.text())
-                  if ((index + 1) == list.length) {
+               year7GeographyPage.getLearningObjective(index).each(($el, count, list) => {
+                  cy.log(count + 1 + '=' + $el.text())
+                  if ((count + 1) == list.length) {
                      $lessoncountatfooter = list.length
                      cy.log('Lesson count at header = ' + $lessoncount)
                      cy.log('Lesson  count at footer = ' + $lessoncountatfooter)

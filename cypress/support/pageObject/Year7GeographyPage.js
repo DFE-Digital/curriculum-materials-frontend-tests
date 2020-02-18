@@ -17,6 +17,15 @@ class Year7GeographyPage {
     getUnitHeader(){
         return cy.get('h1.govuk-heading-l')
     }
+    getLessonsHeader(index) {
+        return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title a:nth-child(1) > h3:nth-child(1)')
+    }
+    getLessonCount(index) {
+        return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-header div.card-header-title > span.govuk-caption-m:nth-child(2)')
+    }
+    getLearningObjective(index) {
+        return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li')
+    }
 }
 //article.card >div.card-header > div.card-header-title > a >h3 : list of all lesson header
 //div.card-header-title > span.govuk-caption-m : number of lesson
