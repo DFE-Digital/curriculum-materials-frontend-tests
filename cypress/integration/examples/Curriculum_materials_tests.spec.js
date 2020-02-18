@@ -184,7 +184,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName().each(($el, index, $list) => {
+      year7GeographyPage.getUnitsName().each(($el, index, $list) => {
          year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
             var linktext = linkName.text()
             expect(linktext).to.have.string(this.data.viewLessonPlanLink)
@@ -200,7 +200,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName().each(($el, index, $list) => {
+      year7GeographyPage.getUnitsName().each(($el, index, $list) => {
          year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
             year7GeographyPage.getViewandLessonPlanLink(index).click()
             year7GeographyPage.getUnitHeader().then(function (linkName1) {
@@ -219,7 +219,6 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutButton().click()
       logoutPage.getLogoutMessage().should('have.text', this.data.logOutMessage)
@@ -243,7 +242,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text();
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -264,7 +263,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -291,7 +290,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(1) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -312,7 +311,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(2) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(2).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -340,7 +339,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(3) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(3).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -368,7 +367,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(4) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(4).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -396,7 +395,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      cy.get(':nth-child(5) > .card-header > .card-header-title > a > h3').then($el => {
+      year7GeographyPage.getUnitName(5).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
