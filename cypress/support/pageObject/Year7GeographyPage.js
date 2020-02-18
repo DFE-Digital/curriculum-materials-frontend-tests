@@ -8,7 +8,7 @@ class Year7GeographyPage {
     getLessonHeader() {
         return cy.get('h3:nth-child(1)')
     }
-    getUnitName() {
+    getUnitsName() {
         return cy.get('article.card >div.card-header > div.card-header-title > a >h3')
     }
     getViewandLessonPlanLink(indexNumber) {
@@ -25,6 +25,9 @@ class Year7GeographyPage {
     }
     getLearningObjective(index) {
         return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li')
+    }
+    getUnitName(i) {
+        return cy.get(':nth-child('+i+') > .card-header > .card-header-title > a > h3')        
     }
 }
 //article.card >div.card-header > div.card-header-title > a >h3 : list of all lesson header
