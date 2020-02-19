@@ -24,7 +24,7 @@ describe('Validate user is able to view curriculum material', function () {
    this.beforeEach(function () {
       cy.visit(Cypress.env('url'))
       cy.fixture('example').then(function (data) {
-         this.data = data        
+         this.data = data
       })
    })
 
@@ -120,11 +120,10 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getPageName().should("have.text", ccp.name);
       cy.get(':nth-child(2) > .govuk-heading-m').should('have.text', "What is covered in TODO!!")
       cy.get("#main-content > :nth-child(2) > p").should(
-        "have.text",
-        ccp.overview.trim()
+         "have.text",
+         ccp.overview.trim()
       );
    })
-
    it('Validate the user is able to view lessons header/unit ', function () {
       let units = []
       /**
@@ -415,53 +414,71 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it("Validates the user is able to download the lesson plan", function() {
-     homePage.getStartButton().click();
-     const servicePage = new SeviceDetailsPage();
-     servicePage.getContinueButton().click();
-     const keyStagePage = new KeyStagePage();
-     keyStagePage.getKeyStageRadioButton().click();
-     keyStagePage.getKeyStageContinueButton().click();
-     const year7GeographyPage = new Year7GeographyPage();
-     cy.get(
-       ":nth-child(1) > .card-header > .card-header-title > a > h3"
-     ).click();
-     cy.get(".govuk-table__body > :nth-child(1) > :nth-child(4) > a").click();
-     cy.get(":nth-child(3) > .govuk-tabs__tab").click();
-     cy.get(".govuk-list > :nth-child(1) > a").should(
-       "have.attr",
-       "target",
-       "_blank"
-     );
-     cy.get(".govuk-list > :nth-child(1) > a[href").then(function($btn) {
-        cy.visit($btn.prop("href"), {
-           onBeforeLoad(win) {
-            cy.stub(win, 'print')
-          }
-       });
-       cy.window()
-         .its("print")
-         .should("be.called");
-       cy.get(".govuk-breadcrumbs").should("not.exist");
-       cy.get(".govuk-footer").should("exist");
-       cy.get(".govuk-header").should("not.exist");
-      [("Understand the aims of the lesson", "Lesson contents")].forEach(
-         text => {
-            cy.get(".govuk-grid-column-full h2").should("contain", text);
-         }
-      );
-       [
-         "Core knowledge for teachers",
-         "Vocabulary",
-         "Common misconceptions",
-         "Building on previous knowledge"
-       ].forEach(text => {
-         cy.get(".govuk-grid-column-full .govuk-heading-m").should(
-           "contain",
-           text
-         );
-       });
-       cy.get(".govuk-table.lesson-parts").should('exist');
-     });
+   it("Validates the user is able to download the lesson plan", function () {
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const year7GeographyPage = new Year7GeographyPage();
+      year7GeographyPage.getUnitName(1).click();
+      year7GeographyPage.getFirstViewLessonLink().click();
+      var lessonNumbers
+      year7GeographyPage.getLessonNumber().then(function (lessonNumber) {
+         lessonNumbers = lessonNumber.text()    
+      })
+      year7GeographyPage.getDownloadTab().click();
+      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
+      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
+         cy.visit($btn.prop("href"), {
+            onBeforeLoad(win) {
+               cy.stub(win, 'print')
+            }
+         });
+         cy.window().its("print").should("be.called");
+         cy.get(".govuk-breadcrumbs").should("not.exist");
+         cy.get(".govuk-footer").should("exist");
+         cy.get(".govuk-header").should("not.exist");
+
+
+         [("Understand the aims of the lesson", "Lesson contents")].forEach(
+            text => {
+               cy.get(".govuk-grid-column-full h2").should("contain", text);
+            }
+         );         
+
+         ["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
+            cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
+         });
+         year7GeographyPage.getLessonNumberinPDFFile().should('have.text',lessonNumbers) 
+      });
+   });
+
+   it("Validates the user is able to see logo inside the downloaded lesson plan", function () {
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const year7GeographyPage = new Year7GeographyPage();
+      year7GeographyPage.getUnitName(1).click();
+      year7GeographyPage.getFirstViewLessonLink().click();
+      year7GeographyPage.getDownloadTab().click();
+      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
+      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
+         cy.visit($btn.prop("href"), {
+            onBeforeLoad(win) {
+               cy.stub(win, 'print')
+            }
+         });
+         cy.window().its("print").should("be.called");
+         cy.get(".govuk-breadcrumbs").should("not.exist");
+         cy.get(".govuk-header").should("not.exist");
+         cy.get('.govuk-footer__meta-item--grow').should('exist')
+         year7GeographyPage.getLogoInsidePDFFile().should('exist')
+         year7GeographyPage.getFooterInsidePDFFile().should('exist')
+      });
    });
 })

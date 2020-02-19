@@ -29,6 +29,27 @@ class Year7GeographyPage {
     getUnitName(i) {
         return cy.get(':nth-child('+i+') > .card-header > .card-header-title > a > h3')        
     }
+    getFirstViewLessonLink() {
+        return cy.get(".govuk-table__body > :nth-child(1) > :nth-child(4) > a")      
+    }
+    getDownloadTab() {
+        return cy.get(":nth-child(3) > .govuk-tabs__tab")    
+    }
+    getPrintLessonPlanLink() {
+        return cy.get(".govuk-list > :nth-child(1) > a")   
+    }
+    getLessonNumber() {
+        return cy.get('#knowledge-overview > :nth-child(2)')  
+    }
+    getLessonNumberinPDFFile() {
+        return cy.get('.govuk-grid-column-full > :nth-child(3)')
+    }
+    getLogoInsidePDFFile() {
+        return cy.get('.govuk-footer__meta > :nth-child(2) > .govuk-footer__link')
+    }
+    getFooterInsidePDFFile() {
+        return cy.get('.govuk-footer')
+    }    
 }
 //article.card >div.card-header > div.card-header-title > a >h3 : list of all lesson header
 //div.card-header-title > span.govuk-caption-m : number of lesson
