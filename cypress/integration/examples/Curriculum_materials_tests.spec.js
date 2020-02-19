@@ -32,6 +32,8 @@ describe('Validate user is able to view curriculum material', function () {
       homePage.getPageName().should('have.text', this.data.pageName)
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
+      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      .next().should('exist')      
    })
 
    it('Validate the user is able to see Before you start message on home page', function () {
@@ -62,6 +64,8 @@ describe('Validate user is able to view curriculum material', function () {
       const servicePage = new SeviceDetailsPage()
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
          .next().should('have.text', this.data.servicePageContent2)
+         cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      .next().should('exist')
    })
 
    it('Validate the user is able to navigate to key stage page and able to view option to select key stage', function () {
@@ -72,6 +76,8 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStagePageHeader().should('have.text', this.data.keyStagePageHeaher)
       keyStagePage.getKeyStagePageSubHeader().should('have.text', this.data.keyStagePageSubHeader)
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
+      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      .next().should('exist')
    })
 
    it.skip('Validate the system is not allowing user to navigate to next page without selecting year radio button ', function () {
@@ -123,6 +129,8 @@ describe('Validate user is able to view curriculum material', function () {
          "have.text",
          ccp.overview.trim()
       );
+      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      .next().should('exist')
    })
    it('Validate the user is able to view lessons header/unit ', function () {
       let units = []
