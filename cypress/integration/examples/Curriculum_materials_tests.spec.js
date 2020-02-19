@@ -5,6 +5,7 @@ import KeyStagePage from '../../support/pageObject/KeyStagePage'
 import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
 import LogoutPage from '../../support/pageObject/LogoutPage'
 import InvitationPage from '../../support/pageObject/InvitationPage'
+import ReusableMethod from '../../support/ReusableMethod'
 
 let ccps = []
 let ccp = {}
@@ -21,6 +22,7 @@ before(() => {
 
 describe('Validate user is able to view curriculum material', function () {
    const homePage = new HomePage()
+   const reusableMethod=new ReusableMethod()
    this.beforeEach(function () {
       cy.visit(Cypress.env('url'))
       cy.fixture('example').then(function (data) {
@@ -32,8 +34,8 @@ describe('Validate user is able to view curriculum material', function () {
       homePage.getPageName().should('have.text', this.data.pageName)
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
-      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
-      .next().should('exist')      
+      reusableMethod.getFooterLogo().should('exist').children().should('exist')
+      .next().should('exist')       
    })
 
    it('Validate the user is able to see Before you start message on home page', function () {
@@ -64,7 +66,7 @@ describe('Validate user is able to view curriculum material', function () {
       const servicePage = new SeviceDetailsPage()
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
          .next().should('have.text', this.data.servicePageContent2)
-         cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      reusableMethod.getFooterLogo().should('exist').children().should('exist')
       .next().should('exist')
    })
 
@@ -76,7 +78,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStagePageHeader().should('have.text', this.data.keyStagePageHeaher)
       keyStagePage.getKeyStagePageSubHeader().should('have.text', this.data.keyStagePageSubHeader)
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
-      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      reusableMethod.getFooterLogo().should('exist').children().should('exist')
       .next().should('exist')
    })
 
@@ -129,7 +131,7 @@ describe('Validate user is able to view curriculum material', function () {
          "have.text",
          ccp.overview.trim()
       );
-      cy.get('.govuk-footer__meta').should('exist').children().should('exist')
+      reusableMethod.getFooterLogo().should('exist').children().should('exist')
       .next().should('exist')
    })
    it('Validate the user is able to view lessons header/unit ', function () {
@@ -214,6 +216,8 @@ describe('Validate user is able to view curriculum material', function () {
                cy.log(linkName1.text())
                year7GeographyPage.getUnitHeader().should('have.text', $el.text())
             })
+            reusableMethod.getFooterLogo().should('exist').children().should('exist')
+            .next().should('exist')
             cy.navigateBack()
          })
       })
@@ -229,6 +233,8 @@ describe('Validate user is able to view curriculum material', function () {
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutButton().click()
       logoutPage.getLogoutMessage().should('have.text', this.data.logOutMessage)
+      reusableMethod.getFooterLogo().should('exist').children().should('exist')
+      .next().should('exist')  
    })
 
    xit('Validate the user is able to view the invitation page and it\'s content', function () {
