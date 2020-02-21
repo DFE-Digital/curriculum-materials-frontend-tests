@@ -49,6 +49,12 @@ class Year7GeographyPage {
     }
     getFooterInsidePDFFile() {
         return cy.get('.govuk-footer')
+    }
+    getUnits() {
+        return cy.get(".cards-container")
+    } 
+    getUnitOverview() {
+        return cy.get("#main-content > :nth-child(2) > p")
     }    
 }
 export default Year7GeographyPage;
