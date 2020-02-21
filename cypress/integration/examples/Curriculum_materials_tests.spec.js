@@ -121,7 +121,7 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getPageName().should('have.text', ccp.name)
    })
 
-   it('Validate the user is able to view page descriptions for Year 7 Geography page', function () {
+   it('Validate the user is able to view page descriptions on unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -131,9 +131,7 @@ describe('Validate user is able to view curriculum material', function () {
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getPageName().should("have.text", ccp.name);
       cy.get(':nth-child(2) > .govuk-heading-m').should('have.text', "What is covered in TODO!!")
-      cy.get("#main-content > :nth-child(2) > p").should(
-         "have.text",
-         ccp.overview.trim()
+      year7GeographyPage.getUnitOverview().should("have.text",ccp.overview.trim()
       );
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
          .next().should('exist')
@@ -145,17 +143,16 @@ describe('Validate user is able to view curriculum material', function () {
        */
       cy.request(`/api/v1/ccps/${ccp.id}/units`).then(res => {
          units = res.body
-         cy.log(units.name)
-      })
-      homePage.getStartButton().click()
-      const servicePage = new SeviceDetailsPage()
-      servicePage.getContinueButton().click()
-      const keyStagePage = new KeyStagePage()
-      keyStagePage.getKeyStageRadioButton().click()
-      keyStagePage.getKeyStageContinueButton().click()
-      units.forEach(unit => {
-
-         cy.get(".cards-container").should("contain", unit.name)
+         homePage.getStartButton().click()
+         const servicePage = new SeviceDetailsPage()
+         servicePage.getContinueButton().click()
+         const keyStagePage = new KeyStagePage()
+         keyStagePage.getKeyStageRadioButton().click()
+         keyStagePage.getKeyStageContinueButton().click()
+         const year7GeographyPage = new Year7GeographyPage()
+         units.forEach(unit => {
+            year7GeographyPage.getUnits().should("contain", unit.name)
+         })
       })
    })
 
