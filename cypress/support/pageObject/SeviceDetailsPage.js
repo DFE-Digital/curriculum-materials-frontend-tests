@@ -12,5 +12,10 @@ class SeviceDetailsPage {
     getPageContentofHowServiceWorkPage() {
         return cy.get('.govuk-splash > :nth-child(2)')
     }
+    getImage() {
+        return cy.get('img')
+    }
+
+    
 }
 export default SeviceDetailsPage;
