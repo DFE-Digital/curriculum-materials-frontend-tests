@@ -16,13 +16,13 @@ before(() => {
     */
    cy.request(`api/v1/ccps`).then((res) => {
       ccps = res.body
-      ccp = ccps[0]
+      ccp = ccps[1]
    })
 })
 
 describe('Validate user is able to view curriculum material', function () {
    const homePage = new HomePage()
-   const reusableMethod=new ReusableMethod()
+   const reusableMethod = new ReusableMethod()
    this.beforeEach(function () {
       cy.visit(Cypress.env('url'))
       cy.fixture('example').then(function (data) {
@@ -35,7 +35,7 @@ describe('Validate user is able to view curriculum material', function () {
       homePage.getPageHeader().should('have.text', this.data.pageHeader)
       homePage.getStartButtonName().should('have.text', this.data.startButtonName)
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
-      .next().should('exist')       
+         .next().should('exist')
    })
 
    it('Validate the user is able to see Before you start message on home page', function () {
@@ -52,6 +52,10 @@ describe('Validate user is able to view curriculum material', function () {
       const servicePage = new SeviceDetailsPage()
       servicePage.getServiceDetailsPageHeader().should('have.text', this.data.sevicedetailsPageHeader)
       servicePage.getContinueButton().should('have.text', this.data.continueButtonText)
+      servicePage.getImage().should('exist')
+      servicePage.getImage().then(function (el) {
+         expect(el.prop('alt')).to.have.string('Department for Education')
+      })
    })
 
    it('Validate the user is able to navigate previous page if he click on Back button', function () {
@@ -67,7 +71,7 @@ describe('Validate user is able to view curriculum material', function () {
       servicePage.getPageContentofHowServiceWorkPage().should('have.text', this.data.servicePageContent1)
          .next().should('have.text', this.data.servicePageContent2)
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
-      .next().should('exist')
+         .next().should('exist')
    })
 
    it('Validate the user is able to navigate to key stage page and able to view option to select key stage', function () {
@@ -79,7 +83,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStagePageSubHeader().should('have.text', this.data.keyStagePageSubHeader)
       keyStagePage.getKeyStageFieldSetHeader().should('have.class', 'govuk-fieldset__heading')
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
-      .next().should('exist')
+         .next().should('exist')
    })
 
    it.skip('Validate the system is not allowing user to navigate to next page without selecting year radio button ', function () {
@@ -132,7 +136,7 @@ describe('Validate user is able to view curriculum material', function () {
          ccp.overview.trim()
       );
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
-      .next().should('exist')
+         .next().should('exist')
    })
    it('Validate the user is able to view lessons header/unit ', function () {
       let units = []
@@ -141,6 +145,7 @@ describe('Validate user is able to view curriculum material', function () {
        */
       cy.request(`/api/v1/ccps/${ccp.id}/units`).then(res => {
          units = res.body
+         cy.log(units.name)
       })
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
@@ -148,8 +153,8 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
       units.forEach(unit => {
+
          cy.get(".cards-container").should("contain", unit.name)
       })
    })
@@ -217,7 +222,7 @@ describe('Validate user is able to view curriculum material', function () {
                year7GeographyPage.getUnitHeader().should('have.text', $el.text())
             })
             reusableMethod.getFooterLogo().should('exist').children().should('exist')
-            .next().should('exist')
+               .next().should('exist')
             cy.navigateBack()
          })
       })
@@ -234,10 +239,10 @@ describe('Validate user is able to view curriculum material', function () {
       logoutPage.getLogoutButton().click()
       logoutPage.getLogoutMessage().should('have.text', this.data.logOutMessage)
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
-      .next().should('exist')  
+         .next().should('exist')
    })
 
-   xit('Validate the user is able to view the invitation page and it\'s content', function () {
+   it.skip('Validate the user is able to view the invitation page and it\'s content', function () {
       cy.visit(Cypress.env('url_old'))
       const logoutPage = new LogoutPage()
       logoutPage.getLogoutMessage().should('have.text', this.data.invitationMessage)
@@ -440,7 +445,7 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getFirstViewLessonLink().click();
       var lessonNumbers
       year7GeographyPage.getLessonNumber().then(function (lessonNumber) {
-         lessonNumbers = lessonNumber.text()    
+         lessonNumbers = lessonNumber.text()
       })
       year7GeographyPage.getDownloadTab().click();
       year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
@@ -460,12 +465,12 @@ describe('Validate user is able to view curriculum material', function () {
             text => {
                cy.get(".govuk-grid-column-full h2").should("contain", text);
             }
-         );         
+         );
 
          ["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
             cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
          });
-         year7GeographyPage.getLessonNumberinPDFFile().should('have.text',lessonNumbers) 
+         year7GeographyPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
       });
    });
 
