@@ -16,7 +16,14 @@ before(() => {
     */
    cy.request(`api/v1/ccps`).then((res) => {
       ccps = res.body
-      ccp = ccps[1]
+      cy.log("CCP Count = "+ccps.length)
+      if (ccps.length == 1) {
+         ccp = ccps[0]
+      }
+      else {
+         ccp = ccps[(ccp.length) - 1]
+      }
+
    })
 })
 
@@ -131,7 +138,7 @@ describe('Validate user is able to view curriculum material', function () {
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getPageName().should("have.text", ccp.name);
       cy.get(':nth-child(2) > .govuk-heading-m').should('have.text', "What is covered in TODO!!")
-      year7GeographyPage.getUnitOverview().should("have.text",ccp.overview.trim()
+      year7GeographyPage.getUnitOverview().should("have.text", ccp.overview.trim()
       );
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
          .next().should('exist')
@@ -297,7 +304,7 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on Earthquake damage unit page', function () {
+   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on first unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -309,11 +316,16 @@ describe('Validate user is able to view curriculum material', function () {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.siblings>ol>li>a').each(($el, index, $list) => {
-            var linkText = $el.text()
-            cy.contains(linkText).click()
-            cy.get('.govuk-heading-l').should('have.text', linkText)
-         })
+         if (cy.get('.siblings>ol>li>a').should('not.exist')) {
+            cy.log("Only one unit is available!!")
+         }
+         else {
+            cy.get('.siblings>ol>li>a').each(($el, index, $list) => {
+               var linkText = $el.text()
+               cy.contains(linkText).click()
+               cy.get('.govuk-heading-l').should('have.text', linkText)
+            })
+         }
       })
    })
 
@@ -326,7 +338,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(2).then($el => {
+      year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
          cy.get('.govuk-heading-l').should('have.text', heading)
@@ -346,7 +358,7 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on Earthquakes unit page', function () {
+   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he third unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -354,27 +366,33 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(3).then($el => {
-         let heading = $el.text()
-         $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-               var learningObjective = learningobjective.text()
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-               cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-               cy.get('#tab_lesson-contents').click()
-               cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
-               cy.get('#downloads > h2').should('have.text', 'Downloads')
-               cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+      if (year7GeographyPage.getUnitCount() >= 3) {
+         year7GeographyPage.getUnitName(3).then($el => {
+            let heading = $el.text()
+            $el.click()
+            cy.get('.govuk-heading-l').should('have.text', heading)
+            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
+                  var learningObjective = learningobjective.text()
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
+                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
+                  cy.get('#tab_lesson-contents').click()
+                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
+                  cy.get('#tab_downloads').click()
+                  cy.get('#downloads > h2').should('have.text', 'Downloads')
+                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+               })
             })
          })
-      })
+      }
+      else {
+         cy.log("Third unit page doesn't exist")
+      }
+
    })
 
-   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on Plate tectonics unit page', function () {
+   it.only('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fourth unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -382,27 +400,32 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(4).then($el => {
-         let heading = $el.text()
-         $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-               var learningObjective = learningobjective.text()
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-               cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-               cy.get('#tab_lesson-contents').click()
-               cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
-               cy.get('#downloads > h2').should('have.text', 'Downloads')
-               cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+      if (year7GeographyPage.getUnitCount() >= 4) {
+         year7GeographyPage.getUnitName(4).then($el => {
+            let heading = $el.text()
+            $el.click()
+            cy.get('.govuk-heading-l').should('have.text', heading)
+            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
+                  var learningObjective = learningobjective.text()
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
+                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
+                  cy.get('#tab_lesson-contents').click()
+                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
+                  cy.get('#tab_downloads').click()
+                  cy.get('#downloads > h2').should('have.text', 'Downloads')
+                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+               })
             })
          })
-      })
+      }
+      else {
+         cy.log("Fourth unit page doesn't exist")
+      }
    })
 
-   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on Types of volcano unit page', function () {
+   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fifth unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -410,24 +433,30 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(5).then($el => {
-         let heading = $el.text()
-         $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-               var learningObjective = learningobjective.text()
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-               cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-               cy.get('#tab_lesson-contents').click()
-               cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
-               cy.get('#downloads > h2').should('have.text', 'Downloads')
-               cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+      if (year7GeographyPage.getUnitCount() >= 5) {
+         year7GeographyPage.getUnitName(5).then($el => {
+            let heading = $el.text()
+            $el.click()
+            cy.get('.govuk-heading-l').should('have.text', heading)
+            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
+                  var learningObjective = learningobjective.text()
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
+                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
+                  cy.get('#tab_lesson-contents').click()
+                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
+                  cy.get('#tab_downloads').click()
+                  cy.get('#downloads > h2').should('have.text', 'Downloads')
+                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
+               })
             })
          })
-      })
+      }
+      else {
+         cy.log("Fourth unit page doesn't exist")
+      }
+
    })
 
    it("Validates the user is able to download the lesson plan", function () {
