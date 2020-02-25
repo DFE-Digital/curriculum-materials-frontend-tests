@@ -16,7 +16,7 @@ before(() => {
     */
    cy.request(`api/v1/ccps`).then((res) => {
       ccps = res.body
-      cy.log("CCP Count = "+ccps.length)
+      //cy.log("CCP Count = "+ccps.length)
       if (ccps.length == 1) {
          ccp = ccps[0]
       }
@@ -392,7 +392,7 @@ describe('Validate user is able to view curriculum material', function () {
 
    })
 
-   it.only('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fourth unit page', function () {
+   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fourth unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
