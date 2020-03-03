@@ -3,7 +3,6 @@ class SeviceDetailsPage {
         return cy.get('.govuk-heading-l')
     }
     getContinueButton() {
-        //return cy.get('.govuk-button')
         return cy.contains('Continue')
     }
     getBackButton() {
@@ -15,7 +14,5 @@ class SeviceDetailsPage {
     getImage() {
         return cy.get('img')
     }
-
-    
 }
 export default SeviceDetailsPage;
