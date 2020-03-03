@@ -12,6 +12,9 @@ class HomePage {
   getStartButton() {
     return cy.get('a.govuk-button.govuk-button')
   }
+    static getStartButton() {
+    cy.get('a.govuk-button.govuk-button').click()
+  }
   getBeforYouStartHeader() {
     return cy.get('.govuk-grid-column-two-thirds > h3')
   }

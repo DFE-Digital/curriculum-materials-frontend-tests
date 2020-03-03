@@ -137,9 +137,8 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click()
       const year7GeographyPage = new Year7GeographyPage()
       year7GeographyPage.getPageName().should("have.text", ccp.name);
-      cy.get(':nth-child(2) > .govuk-heading-m').should('have.text', "What is covered in TODO!!")
-      year7GeographyPage.getUnitOverview().should("have.text", ccp.overview.trim()
-      );
+      year7GeographyPage.getUnitOverview().should("exist")
+      //year7GeographyPage.getUnitOverview().should("have.text", ccp.overview);
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
          .next().should('exist')
    })
@@ -460,7 +459,7 @@ describe('Validate user is able to view curriculum material', function () {
    })
 
    it("Validates the user is able to download the lesson plan", function () {
-      homePage.getStartButton().click();
+      HomePage.getStartButton()
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
       const keyStagePage = new KeyStagePage();
@@ -473,6 +472,7 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getLessonNumber().then(function (lessonNumber) {
          lessonNumbers = lessonNumber.text()
       })
+      year7GeographyPage.getDownloadTab().should('exist')
       year7GeographyPage.getDownloadTab().click();
       year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
       cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
@@ -493,10 +493,37 @@ describe('Validate user is able to view curriculum material', function () {
             }
          );
 
-         ["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
+         /*["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
             cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
-         });
+         });*/
          year7GeographyPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
+      });
+   });
+
+   it("Validates the user is able to see logo inside the downloaded lesson plan", function () {
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const year7GeographyPage = new Year7GeographyPage();
+      year7GeographyPage.getUnitName(1).click();
+      year7GeographyPage.getFirstViewLessonLink().click();
+      year7GeographyPage.getDownloadTab().click();
+      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
+      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
+         cy.visit($btn.prop("href"), {
+            onBeforeLoad(win) {
+               cy.stub(win, 'print')
+            }
+         });
+         cy.window().its("print").should("be.called");
+         cy.get(".govuk-breadcrumbs").should("not.exist");
+         cy.get(".govuk-header").should("not.exist");
+         cy.get('.govuk-footer__meta-item--grow').should('exist')
+         year7GeographyPage.getLogoInsidePDFFile().should('exist')
+         year7GeographyPage.getFooterInsidePDFFile().should('exist')
       });
    });
 
