@@ -266,11 +266,11 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text();
          $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-            cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)').then(function (linkName) {
-               var learningObjective = linkName.text()
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', heading)
+         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
+            year7GeographyPage.getLearningObjectiveName(index).then(function (linkName) {
+               year7GeographyPage.getViewLessonLink(index).should('have.text', 'View lesson')
             })
          })
       })
@@ -287,8 +287,9 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', heading)
+         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
             cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)').then(function (linkName) {
                var learningObjective = linkName.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
@@ -303,7 +304,7 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on first unit page', function () {
+   it('Validate the user is able to navigate to next page and able to view lesson overview details if he is on first unit page', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -314,7 +315,8 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', heading)
          if (cy.get('.siblings>ol>li>a').should('not.exist')) {
             cy.log("Only one unit is available!!")
          }
@@ -322,7 +324,8 @@ describe('Validate user is able to view curriculum material', function () {
             cy.get('.siblings>ol>li>a').each(($el, index, $list) => {
                var linkText = $el.text()
                cy.contains(linkText).click()
-               cy.get('.govuk-heading-l').should('have.text', linkText)
+               year7GeographyPage.getUnitHeader().should('exist')
+               year7GeographyPage.getUnitHeader().should('have.text', linkText)
             })
          }
       })
@@ -340,8 +343,9 @@ describe('Validate user is able to view curriculum material', function () {
       year7GeographyPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         cy.get('.govuk-heading-l').should('have.text', heading)
-         cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', heading)
+         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
             cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
                var learningObjective = learningobjective.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
@@ -486,7 +490,6 @@ describe('Validate user is able to view curriculum material', function () {
          cy.get(".govuk-footer").should("exist");
          cy.get(".govuk-header").should("not.exist");
 
-
          [("Understand the aims of the lesson", "Lesson contents")].forEach(
             text => {
                cy.get(".govuk-grid-column-full h2").should("contain", text);
@@ -527,7 +530,7 @@ describe('Validate user is able to view curriculum material', function () {
       });
    });
 
-   it("Validates the user is able to see logo inside the downloaded lesson plan", function () {
+   it("Validates the user is able to navigate to next page if he clicks on unit header", function () {
       homePage.getStartButton().click();
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
@@ -535,22 +538,12 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
       const year7GeographyPage = new Year7GeographyPage();
-      year7GeographyPage.getUnitName(1).click();
-      year7GeographyPage.getFirstViewLessonLink().click();
-      year7GeographyPage.getDownloadTab().click();
-      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
-      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
-         cy.visit($btn.prop("href"), {
-            onBeforeLoad(win) {
-               cy.stub(win, 'print')
-            }
-         });
-         cy.window().its("print").should("be.called");
-         cy.get(".govuk-breadcrumbs").should("not.exist");
-         cy.get(".govuk-header").should("not.exist");
-         cy.get('.govuk-footer__meta-item--grow').should('exist')
-         year7GeographyPage.getLogoInsidePDFFile().should('exist')
-         year7GeographyPage.getFooterInsidePDFFile().should('exist')
-      });
+      year7GeographyPage.getLessonHeader().should('exist')
+      year7GeographyPage.getLessonHeader().then(function (headerTest) {
+         year7GeographyPage.getLessonHeader().click();
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', headerTest.text())
+         cy.get('.current').should('have.text', headerTest.text())
+      })
    });
 })
