@@ -9,12 +9,12 @@ class Year7GeographyPage {
         return cy.get('h3:nth-child(1)')
     }
     getUnitCount() {
-        let count=1
+        let count = 1
 
         cy.get('h3:nth-child(1)').each(($el, index, $list) => {
 
-            count=$list.length
-         })
+            count = $list.length
+        })
 
         return count
     }
@@ -38,16 +38,6 @@ class Year7GeographyPage {
         return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li')
     }
     getUnitName(i) {
-         if(i==1)
-            {
-             cy.log('**************************'+i)
-            }
-            else
-            {
-                cy.log('**************************'+i)
-            }
-
-
         return cy.get(':nth-child(' + i + ') > .card-header > .card-header-title > a > h3')
 
     }
@@ -78,5 +68,18 @@ class Year7GeographyPage {
     getUnitOverview() {
         return cy.get("#main-content > :nth-child(2) > p")
     }
+    getLearningObjectiveTable() {
+        return cy.get('.govuk-table__body > tr ')
+    }
+    getLearningObjectiveName(index) {
+        return cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)')
+    }
+    getViewLessonLink(index) {
+        return cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a')
+    }
+
+
+
+
 }
 export default Year7GeographyPage;
