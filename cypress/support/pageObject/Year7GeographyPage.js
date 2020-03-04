@@ -77,9 +77,26 @@ class Year7GeographyPage {
     getViewLessonLink(index) {
         return cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a')
     }
-
-
-
-
+    getknowledgeOverviewTab() {
+        return cy.get('#tab_knowledge-overview')
+    }
+    getLessonContentLink() {
+        return cy.get('#knowledge-overview > .govuk-button')
+    }
+    getLessonContentsTab() {
+        return cy.get('#tab_lesson-contents')
+    }
+    getDownloadsLink() {
+        return cy.get('#lesson-contents > .govuk-button')
+    }
+    getCurrentUnitName() {
+        return cy.get('.current')
+    }
+    getDownloadsHeader() {
+        return cy.get('#downloads > h2')
+    }
+    getDownloadsSubHeader() {
+        return cy.get('.downloads > .govuk-heading-m')
+    }
 }
 export default Year7GeographyPage;

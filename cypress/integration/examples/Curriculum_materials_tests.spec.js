@@ -560,14 +560,16 @@ describe('Validate user is able to view curriculum material', function () {
          year7GeographyPage.getLessonHeader().click();
          year7GeographyPage.getUnitHeader().should('exist')
          year7GeographyPage.getUnitHeader().should('have.text', headerTest.text())
-         cy.get('.current').should('have.text', headerTest.text())
-         cy.get(':nth-child(2) > :nth-child(4) > a').click();
-         cy.get('#tab_knowledge-overview').should('exist')
-         cy.get('#knowledge-overview > .govuk-button').should('exist')
-         cy.get('#knowledge-overview > .govuk-button').click()
-         cy.get('#tab_lesson-contents').should('exist')
-         cy.get('#lesson-contents > .govuk-button').should('exist')
-         cy.get('#lesson-contents > .govuk-button').click()
+         year7GeographyPage.getCurrentUnitName().should('have.text', headerTest.text())
+         year7GeographyPage.getViewLessonLink(1).click();
+         year7GeographyPage.getknowledgeOverviewTab().should('exist')
+         year7GeographyPage.getLessonContentLink().should('exist')
+         year7GeographyPage.getLessonContentLink().click()
+         year7GeographyPage.getLessonContentsTab().should('exist')
+         year7GeographyPage.getDownloadsLink().should('exist')
+         year7GeographyPage.getDownloadsLink().click()
+         year7GeographyPage.getDownloadsHeader().should('exist')
+         year7GeographyPage.getDownloadsSubHeader().should('exist')
       })
    });
 })
