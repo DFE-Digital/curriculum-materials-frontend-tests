@@ -2,7 +2,7 @@
 import HomePage from '../../support/pageObject/HomePage'
 import SeviceDetailsPage from '../../support/pageObject/SeviceDetailsPage'
 import KeyStagePage from '../../support/pageObject/KeyStagePage'
-import Year7GeographyPage from '../../support/pageObject/Year7GeographyPage'
+import UnitsPage from '../../support/pageObject/UnitsPage'
 import LogoutPage from '../../support/pageObject/LogoutPage'
 import InvitationPage from '../../support/pageObject/InvitationPage'
 import ReusableMethod from '../../support/ReusableMethod'
@@ -101,10 +101,10 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStagePageHeader().should('have.text', this.data.keyStagePageHeaher)
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
+      const UnitsPage = new UnitsPage()
       try {
          flag = false
-         year7GeographyPage.getPageName().should('have.text', this.data.geographyPageName)
+         UnitsPage.getPageName().should('have.text', this.data.geographyPageName)
       }
       catch (err) {
          flag = true
@@ -124,8 +124,8 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getPageName().should('have.text', ccp.name)
+      const unitsPage = new UnitsPage()
+      unitsPage.getPageName().should('have.text', ccp.name)
    })
 
    it('Validate the user is able to view page descriptions on unit page', function () {
@@ -135,10 +135,10 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getPageName().should("have.text", ccp.name);
-      year7GeographyPage.getUnitOverview().should("exist")
-      //year7GeographyPage.getUnitOverview().should("have.text", ccp.overview);
+      const unitsPage = new UnitsPage()
+      unitsPage.getPageName().should("have.text", ccp.name);
+      unitsPage.getUnitOverview().should("exist")
+      //unitsPage.getUnitOverview().should("have.text", ccp.overview);
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
          .next().should('exist')
    })
@@ -155,9 +155,9 @@ describe('Validate user is able to view curriculum material', function () {
          const keyStagePage = new KeyStagePage()
          keyStagePage.getKeyStageRadioButton().click()
          keyStagePage.getKeyStageContinueButton().click()
-         const year7GeographyPage = new Year7GeographyPage()
+         const unitsPage = new UnitsPage()
          units.forEach(unit => {
-            year7GeographyPage.getUnits().should("contain", unit.name)
+            unitsPage.getUnits().should("contain", unit.name)
          })
       })
    })
@@ -171,15 +171,15 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getLessonHeader().each(($el, index, $list) => {
-         year7GeographyPage.getLessonsHeader(index).then(function ($lessonHeader) {
+      const unitsPage = new UnitsPage()
+      unitsPage.getLessonHeader().each(($el, index, $list) => {
+         unitsPage.getLessonsHeader(index).then(function ($lessonHeader) {
             cy.log($lessonHeader.text())
-            year7GeographyPage.getLessonCount(index).then(function ($lessonCount) {
+            unitsPage.getLessonCount(index).then(function ($lessonCount) {
                cy.log($lessonCount.text())
                var count = $lessonCount.text().split(' ')[0]
                $lessoncount = Number(count)
-               year7GeographyPage.getLearningObjective(index).each(($el, count, list) => {
+               unitsPage.getLearningObjective(index).each(($el, count, list) => {
                   cy.log(count + 1 + '=' + $el.text())
                   if ((count + 1) == list.length) {
                      $lessoncountatfooter = list.length
@@ -200,9 +200,9 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitsName().each(($el, index, $list) => {
-         year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitsName().each(($el, index, $list) => {
+         unitsPage.getViewandLessonPlanLink(index).then(function (linkName) {
             var linktext = linkName.text()
             expect(linktext).to.have.string(this.data.viewLessonPlanLink)
          })
@@ -216,13 +216,13 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitsName().each(($el, index, $list) => {
-         year7GeographyPage.getViewandLessonPlanLink(index).then(function (linkName) {
-            year7GeographyPage.getViewandLessonPlanLink(index).click()
-            year7GeographyPage.getUnitHeader().then(function (linkName1) {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitsName().each(($el, index, $list) => {
+         unitsPage.getViewandLessonPlanLink(index).then(function (linkName) {
+            unitsPage.getViewandLessonPlanLink(index).click()
+            unitsPage.getUnitHeader().then(function (linkName1) {
                cy.log(linkName1.text())
-               year7GeographyPage.getUnitHeader().should('have.text', $el.text())
+               unitsPage.getUnitHeader().should('have.text', $el.text())
             })
             reusableMethod.getFooterLogo().should('exist').children().should('exist')
                .next().should('exist')
@@ -262,15 +262,15 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(1).then($el => {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitName(1).then($el => {
          let heading = $el.text();
          $el.click()
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', heading)
-         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
-            year7GeographyPage.getLearningObjectiveName(index).then(function (linkName) {
-               year7GeographyPage.getViewLessonLink(index).should('have.text', 'View lesson')
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', heading)
+         unitsPage.getLearningObjectiveTable().each(($el, index, $list) => {
+            unitsPage.getLearningObjectiveName(index).then(function (linkName) {
+               unitsPage.getViewLessonLink(index).should('have.text', 'View lesson')
             })
          })
       })
@@ -283,13 +283,13 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(1).then($el => {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', heading)
-         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', heading)
+         unitsPage.getLearningObjectiveTable().each(($el, index, $list) => {
             cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2)').then(function (linkName) {
                var learningObjective = linkName.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
@@ -311,12 +311,12 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(1).then($el => {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', heading)
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', heading)
          if (cy.get('.siblings>ol>li>a').should('not.exist')) {
             cy.log("Only one unit is available!!")
          }
@@ -324,8 +324,8 @@ describe('Validate user is able to view curriculum material', function () {
             cy.get('.siblings>ol>li>a').each(($el, index, $list) => {
                var linkText = $el.text()
                cy.contains(linkText).click()
-               year7GeographyPage.getUnitHeader().should('exist')
-               year7GeographyPage.getUnitHeader().should('have.text', linkText)
+               unitsPage.getUnitHeader().should('exist')
+               unitsPage.getUnitHeader().should('have.text', linkText)
             })
          }
       })
@@ -339,13 +339,13 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      year7GeographyPage.getUnitName(1).then($el => {
+      const unitsPage = new UnitsPage()
+      unitsPage.getUnitName(1).then($el => {
          let heading = $el.text()
          $el.click()
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', heading)
-         year7GeographyPage.getLearningObjectiveTable().each(($el, index, $list) => {
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', heading)
+         unitsPage.getLearningObjectiveTable().each(($el, index, $list) => {
             cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
                var learningObjective = learningobjective.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
@@ -368,9 +368,9 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      if (year7GeographyPage.getUnitCount() >= 3) {
-         year7GeographyPage.getUnitName(3).then($el => {
+      const unitsPage = new UnitsPage()
+      if (unitsPage.getUnitCount() >= 3) {
+         unitsPage.getUnitName(3).then($el => {
             let heading = $el.text()
             $el.click()
             cy.get('.govuk-heading-l').should('have.text', heading)
@@ -402,9 +402,9 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      if (year7GeographyPage.getUnitCount() >= 4) {
-         year7GeographyPage.getUnitName(4).then($el => {
+      const unitsPage = new UnitsPage()
+      if (unitsPage.getUnitCount() >= 4) {
+         unitsPage.getUnitName(4).then($el => {
             let heading = $el.text()
             $el.click()
             cy.get('.govuk-heading-l').should('have.text', heading)
@@ -435,9 +435,9 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage()
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
-      const year7GeographyPage = new Year7GeographyPage()
-      if (year7GeographyPage.getUnitCount() >= 5) {
-         year7GeographyPage.getUnitName(5).then($el => {
+      const unitsPage = new UnitsPage()
+      if (unitsPage.getUnitCount() >= 5) {
+         unitsPage.getUnitName(5).then($el => {
             let heading = $el.text()
             $el.click()
             cy.get('.govuk-heading-l').should('have.text', heading)
@@ -469,16 +469,16 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage();
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
-      const year7GeographyPage = new Year7GeographyPage();
-      year7GeographyPage.getUnitName(1).click();
-      year7GeographyPage.getFirstViewLessonLink().click();
+      const unitsPage = new UnitsPage();
+      unitsPage.getUnitName(1).click();
+      unitsPage.getFirstViewLessonLink().click();
       var lessonNumbers
-      year7GeographyPage.getLessonNumber().then(function (lessonNumber) {
+      unitsPage.getLessonNumber().then(function (lessonNumber) {
          lessonNumbers = lessonNumber.text()
       })
-      year7GeographyPage.getDownloadTab().should('exist')
-      year7GeographyPage.getDownloadTab().click();
-      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
+      unitsPage.getDownloadTab().should('exist')
+      unitsPage.getDownloadTab().click();
+      unitsPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
       cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
          cy.visit($btn.prop("href"), {
             onBeforeLoad(win) {
@@ -499,7 +499,7 @@ describe('Validate user is able to view curriculum material', function () {
          /*["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
             cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
          });*/
-         year7GeographyPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
+         unitsPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
       });
    });
 
@@ -510,11 +510,11 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage();
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
-      const year7GeographyPage = new Year7GeographyPage();
-      year7GeographyPage.getUnitName(1).click();
-      year7GeographyPage.getFirstViewLessonLink().click();
-      year7GeographyPage.getDownloadTab().click();
-      year7GeographyPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
+      const unitsPage = new UnitsPage();
+      unitsPage.getUnitName(1).click();
+      unitsPage.getFirstViewLessonLink().click();
+      unitsPage.getDownloadTab().click();
+      unitsPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
       cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
          cy.visit($btn.prop("href"), {
             onBeforeLoad(win) {
@@ -525,8 +525,8 @@ describe('Validate user is able to view curriculum material', function () {
          cy.get(".govuk-breadcrumbs").should("not.exist");
          cy.get(".govuk-header").should("not.exist");
          cy.get('.govuk-footer__meta-item--grow').should('exist')
-         year7GeographyPage.getLogoInsidePDFFile().should('exist')
-         year7GeographyPage.getFooterInsidePDFFile().should('exist')
+         unitsPage.getLogoInsidePDFFile().should('exist')
+         unitsPage.getFooterInsidePDFFile().should('exist')
       });
    });
 
@@ -537,13 +537,13 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage();
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
-      const year7GeographyPage = new Year7GeographyPage();
-      year7GeographyPage.getLessonHeader().should('exist')
-      year7GeographyPage.getLessonHeader().then(function (headerTest) {
-         year7GeographyPage.getLessonHeader().click();
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', headerTest.text())
-         cy.get('.current').should('have.text', headerTest.text())
+      const unitsPage = new UnitsPage();
+      unitsPage.getLessonHeader().should('exist')
+      unitsPage.getLessonHeader().then(function (headerTest) {
+         unitsPage.getLessonHeader().click();
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', headerTest.text())
+         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
       })
    });
 
@@ -554,22 +554,22 @@ describe('Validate user is able to view curriculum material', function () {
       const keyStagePage = new KeyStagePage();
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
-      const year7GeographyPage = new Year7GeographyPage();
-      year7GeographyPage.getLessonHeader().should('exist')
-      year7GeographyPage.getLessonHeader().then(function (headerTest) {
-         year7GeographyPage.getLessonHeader().click();
-         year7GeographyPage.getUnitHeader().should('exist')
-         year7GeographyPage.getUnitHeader().should('have.text', headerTest.text())
-         year7GeographyPage.getCurrentUnitName().should('have.text', headerTest.text())
-         year7GeographyPage.getViewLessonLink(1).click();
-         year7GeographyPage.getknowledgeOverviewTab().should('exist')
-         year7GeographyPage.getLessonContentLink().should('exist')
-         year7GeographyPage.getLessonContentLink().click()
-         year7GeographyPage.getLessonContentsTab().should('exist')
-         year7GeographyPage.getDownloadsLink().should('exist')
-         year7GeographyPage.getDownloadsLink().click()
-         year7GeographyPage.getDownloadsHeader().should('exist')
-         year7GeographyPage.getDownloadsSubHeader().should('exist')
+      const unitsPage = new UnitsPage();
+      unitsPage.getLessonHeader().should('exist')
+      unitsPage.getLessonHeader().then(function (headerTest) {
+         unitsPage.getLessonHeader().click();
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', headerTest.text())
+         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getknowledgeOverviewTab().should('exist')
+         unitsPage.getLessonContentLink().should('exist')
+         unitsPage.getLessonContentLink().click()
+         unitsPage.getLessonContentsTab().should('exist')
+         unitsPage.getDownloadsLink().should('exist')
+         unitsPage.getDownloadsLink().click()
+         unitsPage.getDownloadsHeader().should('exist')
+         unitsPage.getDownloadsSubHeader().should('exist')
       })
    });
 })
