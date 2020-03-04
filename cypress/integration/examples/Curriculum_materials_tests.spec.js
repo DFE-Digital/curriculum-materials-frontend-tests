@@ -546,4 +546,28 @@ describe('Validate user is able to view curriculum material', function () {
          cy.get('.current').should('have.text', headerTest.text())
       })
    });
+
+   it("Validates the user is able to access all tabs on lesson overview page", function () {
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const year7GeographyPage = new Year7GeographyPage();
+      year7GeographyPage.getLessonHeader().should('exist')
+      year7GeographyPage.getLessonHeader().then(function (headerTest) {
+         year7GeographyPage.getLessonHeader().click();
+         year7GeographyPage.getUnitHeader().should('exist')
+         year7GeographyPage.getUnitHeader().should('have.text', headerTest.text())
+         cy.get('.current').should('have.text', headerTest.text())
+         cy.get(':nth-child(2) > :nth-child(4) > a').click();
+         cy.get('#tab_knowledge-overview').should('exist')
+         cy.get('#knowledge-overview > .govuk-button').should('exist')
+         cy.get('#knowledge-overview > .govuk-button').click()
+         cy.get('#tab_lesson-contents').should('exist')
+         cy.get('#lesson-contents > .govuk-button').should('exist')
+         cy.get('#lesson-contents > .govuk-button').click()
+      })
+   });
 })
