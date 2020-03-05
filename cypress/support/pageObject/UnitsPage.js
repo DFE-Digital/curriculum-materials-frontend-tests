@@ -15,7 +15,6 @@ class UnitsPage {
 
             count = $list.length
         })
-
         return count
     }
 
