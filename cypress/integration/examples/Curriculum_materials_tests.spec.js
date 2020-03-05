@@ -487,7 +487,7 @@ describe('Validate user is able to view curriculum material', function () {
          });
          cy.window().its("print").should("be.called");
          cy.get(".govuk-breadcrumbs").should("not.exist");
-         cy.get(".govuk-footer").should("exist");
+         cy.get(".govuk-footer").should("not.exist");
          cy.get(".govuk-header").should("not.exist");
 
          [("Understand the aims of the lesson", "Lesson contents")].forEach(
@@ -495,7 +495,6 @@ describe('Validate user is able to view curriculum material', function () {
                cy.get(".govuk-grid-column-full h2").should("contain", text);
             }
          );
-
          /*["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
             cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
          });*/
@@ -524,9 +523,9 @@ describe('Validate user is able to view curriculum material', function () {
          cy.window().its("print").should("be.called");
          cy.get(".govuk-breadcrumbs").should("not.exist");
          cy.get(".govuk-header").should("not.exist");
-         cy.get('.govuk-footer__meta-item--grow').should('exist')
+         /*cy.get('.govuk-footer__meta-item--grow').should('exist')        
          unitsPage.getLogoInsidePDFFile().should('exist')
-         unitsPage.getFooterInsidePDFFile().should('exist')
+         unitsPage.getFooterInsidePDFFile().should('exist')*/
       });
    });
 
