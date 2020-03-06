@@ -571,4 +571,50 @@ describe('Validate user is able to view curriculum material', function () {
          unitsPage.getDownloadsSubHeader().should('exist')
       })
    });
+
+   it.only("Validates the user is able select the lesson as per his choice using change activity", function () {
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const unitsPage = new UnitsPage();
+      unitsPage.getLessonHeader().should('exist')
+      unitsPage.getLessonHeader().then(function (headerTest) {
+         unitsPage.getLessonHeader().click();
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', headerTest.text())
+         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getknowledgeOverviewTab().should('exist')
+         unitsPage.getLessonContentLink().should('exist')
+         unitsPage.getLessonContentLink().click()
+         unitsPage.getLessonContentsTab().should('exist')
+         cy.get('#lesson-contents > h2').should('exist')
+         cy.get(' div.lesson-part:nth-child(1) article.lesson-name-and-description header:nth-child(1) > h3.govuk-heading-m').then(function (defaultSelectedOption) {
+            cy.log(defaultSelectedOption.text())
+            cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+            cy.get('[data-activity="10"] > .govuk-radios__item > .govuk-label').should('exist')
+            cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+               const textLesson = lessonslist.text()
+               if (defaultSelectedOption.text() == textLesson) {
+                  cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (price) {
+                     var checkBoxLocator = price.prop('for')
+                     checkBoxLocator = "#" + checkBoxLocator
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+                  })
+               }
+            })
+            if (cy.get('#activity-choice-activity-id-11-field').should('be.checked')) {
+               cy.get('#activity-choice-activity-id-10-field').click()
+            }
+            else {
+               cy.get('#activity-choice-activity-id-10-field').click()
+            }
+            cy.contains('Save lesson changes').click()
+            cy.get(':nth-child(1) > .lesson-name-and-description > header > .govuk-heading-m').should('exist')
+         })
+      })
+   });
 })
