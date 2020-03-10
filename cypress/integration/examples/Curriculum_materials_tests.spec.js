@@ -572,7 +572,9 @@ describe('Validate user is able to view curriculum material', function () {
       })
    });
 
-   it.only("Validates the user is able select the lesson as per his choice using change activity", function () {
+   it("Validates the user is able select the lesson as per his choice using change activity", function () {
+      let locators = []
+      var defaultSelector
       homePage.getStartButton().click();
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
@@ -593,27 +595,155 @@ describe('Validate user is able to view curriculum material', function () {
          unitsPage.getLessonContentsTab().should('exist')
          cy.get('#lesson-contents > h2').should('exist')
          cy.get(' div.lesson-part:nth-child(1) article.lesson-name-and-description header:nth-child(1) > h3.govuk-heading-m').then(function (defaultSelectedOption) {
-            cy.log(defaultSelectedOption.text())
             cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
-            cy.get('[data-activity="10"] > .govuk-radios__item > .govuk-label').should('exist')
             cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
                const textLesson = lessonslist.text()
                if (defaultSelectedOption.text() == textLesson) {
-                  cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (price) {
-                     var checkBoxLocator = price.prop('for')
+                  cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+                     var checkBoxLocator = forAttr.prop('for')
                      checkBoxLocator = "#" + checkBoxLocator
+                     defaultSelector = checkBoxLocator
                      cy.get('' + checkBoxLocator + '').should('be.checked')
+
                   })
                }
             })
-            if (cy.get('#activity-choice-activity-id-11-field').should('be.checked')) {
-               cy.get('#activity-choice-activity-id-10-field').click()
-            }
-            else {
-               cy.get('#activity-choice-activity-id-10-field').click()
-            }
-            cy.contains('Save lesson changes').click()
-            cy.get(':nth-child(1) > .lesson-name-and-description > header > .govuk-heading-m').should('exist')
+         })
+         //get locator for all lesson plan
+         var s = 0;
+         cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+            const textLesson = lessonslist.text()
+            cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+               var checkBoxLocator = forAttr.prop('for')
+               checkBoxLocator = "#" + checkBoxLocator
+               if (defaultSelector != checkBoxLocator) {
+                  if (s == 0) {
+                     cy.get('' + checkBoxLocator + '').click()
+                     cy.contains('Save lesson changes').click()
+                     cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+                     s++
+                  }
+               }
+            })
+         })
+      })
+   });
+
+   it.only("Validates the user is able to see the content of the selected lesson on lesson contents page", function () {
+      let locators = []
+      var defaultSelector
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const unitsPage = new UnitsPage();
+      unitsPage.getLessonHeader().should('exist')
+      unitsPage.getLessonHeader().then(function (headerTest) {
+         unitsPage.getLessonHeader().click();
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', headerTest.text())
+         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getknowledgeOverviewTab().should('exist')
+         unitsPage.getLessonContentLink().should('exist')
+         unitsPage.getLessonContentLink().click()
+         unitsPage.getLessonContentsTab().should('exist')
+         cy.get('#lesson-contents > h2').should('exist')
+         cy.get(' div.lesson-part:nth-child(1) article.lesson-name-and-description header:nth-child(1) > h3.govuk-heading-m').then(function (defaultSelectedOption) {
+            cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+            cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+               const textLesson = lessonslist.text()
+               if (defaultSelectedOption.text() == textLesson) {
+                  cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+                     var checkBoxLocator = forAttr.prop('for')
+                     checkBoxLocator = "#" + checkBoxLocator
+                     defaultSelector = checkBoxLocator
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+
+                  })
+               }
+            })
+         })
+         //get locator for all lesson plan
+         var s = 0;
+         cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+            const textLesson = lessonslist.text()
+            cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+               var checkBoxLocator = forAttr.prop('for')
+               checkBoxLocator = "#" + checkBoxLocator
+               if (defaultSelector != checkBoxLocator) {
+                  if (s == 0) {
+                     cy.get('' + checkBoxLocator + '').click()
+                     cy.contains('Save lesson changes').click()
+                     cy.get(':nth-child(1) > .lesson-name-and-description > header > .govuk-heading-m').should('exist')
+                     cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+
+                     s++
+                  }
+               }
+            })
+         })
+      })
+   });
+   it("Validates the user is able to cancel the selected lesson if he wish to do so", function () {
+      let locators = []
+      var defaultSelector
+      homePage.getStartButton().click();
+      const servicePage = new SeviceDetailsPage();
+      servicePage.getContinueButton().click();
+      const keyStagePage = new KeyStagePage();
+      keyStagePage.getKeyStageRadioButton().click();
+      keyStagePage.getKeyStageContinueButton().click();
+      const unitsPage = new UnitsPage();
+      unitsPage.getLessonHeader().should('exist')
+      unitsPage.getLessonHeader().then(function (headerTest) {
+         unitsPage.getLessonHeader().click();
+         unitsPage.getUnitHeader().should('exist')
+         unitsPage.getUnitHeader().should('have.text', headerTest.text())
+         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getknowledgeOverviewTab().should('exist')
+         unitsPage.getLessonContentLink().should('exist')
+         unitsPage.getLessonContentLink().click()
+         unitsPage.getLessonContentsTab().should('exist')
+         cy.get('#lesson-contents > h2').should('exist')
+         cy.get(' div.lesson-part:nth-child(1) article.lesson-name-and-description header:nth-child(1) > h3.govuk-heading-m').then(function (defaultSelectedOption) {
+            cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+            cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+               const textLesson = lessonslist.text()
+               if (defaultSelectedOption.text() == textLesson) {
+                  cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+                     var checkBoxLocator = forAttr.prop('for')
+                     checkBoxLocator = "#" + checkBoxLocator
+                     defaultSelector = checkBoxLocator
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+
+                  })
+               }
+            })
+         })
+         //get locator for all lesson plan
+         var s = 0;
+         cy.get('.govuk-radios__item > .govuk-label').each((lessonslist, index, $list) => {
+            const textLesson = lessonslist.text()
+            cy.get('.govuk-radios__item > .govuk-label').eq(index).then(function (forAttr) {
+               var checkBoxLocator = forAttr.prop('for')
+               checkBoxLocator = "#" + checkBoxLocator
+               if (defaultSelector != checkBoxLocator) {
+                  if (s == 0) {
+                     cy.get('' + checkBoxLocator + '').click()
+                     cy.get('' + checkBoxLocator + '').should('be.checked')
+                     cy.get('.govuk-button--secondary').click()
+                     cy.get(':nth-child(1) > .alternatives > .change-link > a').click()
+                     cy.get('' + defaultSelector + '').should('be.checked')
+                     s++
+                  }
+               }
+            })
          })
       })
    });
