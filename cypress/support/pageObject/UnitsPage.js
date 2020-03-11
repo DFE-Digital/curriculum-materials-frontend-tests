@@ -47,7 +47,8 @@ class UnitsPage {
         return cy.get(":nth-child(3) > .govuk-tabs__tab")
     }
     getPrintLessonPlanLink() {
-        return cy.get(".govuk-list > :nth-child(1) > a")
+        //return cy.get(".govuk-list > :nth-child(1) > a")
+        return cy.get('.downloads > :nth-child(3) > a')       
     }
     getLessonNumber() {
         return cy.get('#knowledge-overview > :nth-child(2)')
