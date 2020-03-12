@@ -31,7 +31,11 @@ describe('Validate user is able to view curriculum material', function () {
    const homePage = new HomePage()
    const reusableMethod = new ReusableMethod()
    this.beforeEach(function () {
-      cy.visit(Cypress.env('url'))
+      //cy.visit(Cypress.env('url'))
+      cy.viewport(360, 760)
+      cy.visit('https://dfe-curriculum-materials.herokuapp.com/teachers/session/ff37bd17-42be-47ab-8141-2f5e3b7f2b7f', {
+         auth: { username: 'curriculum-materials', password: 'curriculum-materials' }
+      })
       cy.fixture('example').then(function (data) {
          this.data = data
       })
@@ -294,9 +298,11 @@ describe('Validate user is able to view curriculum material', function () {
                var learningObjective = linkName.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-               cy.get('#tab_lesson-contents').click()
+               //cy.get('#tab_lesson-contents').click()- not worked for mobile
+               cy.get(':nth-child(2) > .govuk-tabs__tab').click()
                cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
+               //cy.get('#tab_downloads').click()- not worked for mobile
+               cy.get(':nth-child(3) > .govuk-tabs__tab').click()
                cy.get('#downloads > h2').should('have.text', 'Downloads')
                cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
             })
@@ -351,9 +357,11 @@ describe('Validate user is able to view curriculum material', function () {
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
                cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-               cy.get('#tab_lesson-contents').click()
+               //cy.get('#tab_lesson-contents').click()
+               cy.get(':nth-child(2) > .govuk-tabs__tab').click()
                cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
+               //cy.get('#tab_downloads').click()
+               cy.get(':nth-child(3) > .govuk-tabs__tab').click()
                cy.get('#downloads > h2').should('have.text', 'Downloads')
                cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
             })
@@ -479,12 +487,11 @@ describe('Validate user is able to view curriculum material', function () {
       unitsPage.getDownloadTab().should('exist')
       unitsPage.getDownloadTab().click();
       unitsPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
-      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
+      cy.get(".downloads > :nth-child(3) > a[href").then(function ($btn) {
          cy.visit($btn.prop("href"), {
-            onBeforeLoad(win) {
-               cy.stub(win, 'print')
-            }
-         });
+            auth: { username: 'curriculum-materials', password: 'curriculum-materials' }
+         }, { onBeforeLoad(win) { cy.stub(win, 'print') } });
+
          cy.window().its("print").should("be.called");
          cy.get(".govuk-breadcrumbs").should("not.exist");
          cy.get(".govuk-footer").should("not.exist");
@@ -500,6 +507,7 @@ describe('Validate user is able to view curriculum material', function () {
          });*/
          unitsPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
       });
+
    });
 
    it("Validates the user is able to see logo inside the downloaded lesson plan", function () {
@@ -514,12 +522,10 @@ describe('Validate user is able to view curriculum material', function () {
       unitsPage.getFirstViewLessonLink().click();
       unitsPage.getDownloadTab().click();
       unitsPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
-      cy.get(".govuk-list > :nth-child(1) > a[href").then(function ($btn) {
+      cy.get(".downloads > :nth-child(3) > a[href").then(function ($btn) {
          cy.visit($btn.prop("href"), {
-            onBeforeLoad(win) {
-               cy.stub(win, 'print')
-            }
-         });
+            auth: { username: 'curriculum-materials', password: 'curriculum-materials' }
+         }, { onBeforeLoad(win) { cy.stub(win, 'print') } });
          cy.window().its("print").should("be.called");
          cy.get(".govuk-breadcrumbs").should("not.exist");
          cy.get(".govuk-header").should("not.exist");
@@ -588,7 +594,7 @@ describe('Validate user is able to view curriculum material', function () {
          unitsPage.getUnitHeader().should('exist')
          unitsPage.getUnitHeader().should('have.text', headerTest.text())
          unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
-         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
          unitsPage.getLessonContentLink().click()
@@ -630,7 +636,7 @@ describe('Validate user is able to view curriculum material', function () {
       })
    });
 
-   it.only("Validates the user is able to see the content of the selected lesson on lesson contents page", function () {
+   it("Validates the user is able to see the content of the selected lesson on lesson contents page", function () {
       let locators = []
       var defaultSelector
       homePage.getStartButton().click();
@@ -646,7 +652,7 @@ describe('Validate user is able to view curriculum material', function () {
          unitsPage.getUnitHeader().should('exist')
          unitsPage.getUnitHeader().should('have.text', headerTest.text())
          unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
-         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
          unitsPage.getLessonContentLink().click()
@@ -705,7 +711,7 @@ describe('Validate user is able to view curriculum material', function () {
          unitsPage.getUnitHeader().should('exist')
          unitsPage.getUnitHeader().should('have.text', headerTest.text())
          unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
-         unitsPage.getViewLessonLink(1).click();
+         unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
          unitsPage.getLessonContentLink().click()

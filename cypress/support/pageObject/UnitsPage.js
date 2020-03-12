@@ -47,7 +47,8 @@ class UnitsPage {
         return cy.get(":nth-child(3) > .govuk-tabs__tab")
     }
     getPrintLessonPlanLink() {
-        return cy.get(".govuk-list > :nth-child(1) > a")
+        //return cy.get(".govuk-list > :nth-child(1) > a")
+        return cy.get('.downloads > :nth-child(3) > a')       
     }
     getLessonNumber() {
         return cy.get('#knowledge-overview > :nth-child(2)')
@@ -77,13 +78,15 @@ class UnitsPage {
         return cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a')
     }
     getknowledgeOverviewTab() {
-        return cy.get('#tab_knowledge-overview')
+        //return cy.get('#tab_knowledge-overview')
+        return cy.get('.govuk-tabs__list-item--selected > .govuk-tabs__tab')
     }
     getLessonContentLink() {
         return cy.get('#knowledge-overview > .govuk-button')
     }
     getLessonContentsTab() {
-        return cy.get('#tab_lesson-contents')
+        //return cy.get('#tab_lesson-contents')
+        return  cy.get(':nth-child(2) > .govuk-tabs__tab').click()
     }
     getDownloadsLink() {
         return cy.get('#lesson-contents > .govuk-button')
