@@ -32,6 +32,7 @@ describe('Validate user is able to view curriculum material', function () {
    const reusableMethod = new ReusableMethod()
    this.beforeEach(function () {
       //cy.visit(Cypress.env('url'))
+      cy.viewport(360, 760)
       cy.visit('https://dfe-curriculum-materials.herokuapp.com/teachers/session/ff37bd17-42be-47ab-8141-2f5e3b7f2b7f', {
          auth: { username: 'curriculum-materials', password: 'curriculum-materials' }
       })
@@ -297,9 +298,11 @@ describe('Validate user is able to view curriculum material', function () {
                var learningObjective = linkName.text()
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-               cy.get('#tab_lesson-contents').click()
+               //cy.get('#tab_lesson-contents').click()- not worked for mobile
+               cy.get(':nth-child(2) > .govuk-tabs__tab').click()
                cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
+               //cy.get('#tab_downloads').click()- not worked for mobile
+               cy.get(':nth-child(3) > .govuk-tabs__tab').click()
                cy.get('#downloads > h2').should('have.text', 'Downloads')
                cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
             })
@@ -354,9 +357,11 @@ describe('Validate user is able to view curriculum material', function () {
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
                cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
                cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-               cy.get('#tab_lesson-contents').click()
+               //cy.get('#tab_lesson-contents').click()
+               cy.get(':nth-child(2) > .govuk-tabs__tab').click()
                cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-               cy.get('#tab_downloads').click()
+               //cy.get('#tab_downloads').click()
+               cy.get(':nth-child(3) > .govuk-tabs__tab').click()
                cy.get('#downloads > h2').should('have.text', 'Downloads')
                cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
             })
