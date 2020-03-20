@@ -19,7 +19,7 @@ class UnitsPage {
     }
 
     getUnitsName() {
-        return cy.get('article.card >div.card-header > div.card-header-title > a >h3')
+        return cy.get('article.card >div.card-header > div.card-header-title')
     }
     getViewandLessonPlanLink(indexNumber) {
         return cy.get('article.card:nth-child(' + (indexNumber + 1) + ') >div.card-footer')
@@ -37,7 +37,7 @@ class UnitsPage {
         return cy.get('article.card:nth-child(' + (index + 1) + ') div.card-body > ul:nth-child(2) >li')
     }
     getUnitName(i) {
-        return cy.get(':nth-child(' + i + ') > .card-header > .card-header-title > a > h3')
+        return cy.get(':nth-child(' + i + ') > .card-header > .card-header-title')
 
     }
     getFirstViewLessonLink() {
@@ -95,10 +95,10 @@ class UnitsPage {
         return cy.get('.current')
     }
     getDownloadsHeader() {
-        return cy.get('#downloads > h2')
+        return cy.get('#tab_downloads')
     }
     getDownloadsSubHeader() {
-        return cy.get('.downloads > .govuk-heading-m')
+        return cy.get('.downloads > .govuk-heading-l')
     }
 }
 export default UnitsPage;
