@@ -1,10 +1,10 @@
 class UnitsPage {
     getPageName() {
-        return cy.get('.govuk-breadcrumbs__list-item')
+        return cy.get('h1')
     }
-    getPageName() {
+    /* getPageName() {
         return cy.get('.govuk-breadcrumbs__list-item')
-    }
+    } */
     getLessonHeader() {
         return cy.get('h3:nth-child(1)')
     }

@@ -3,7 +3,7 @@ class KeyStagePage {
         return cy.get('.govuk-heading-l')
     }
     getKeyStagePageSubHeader() {
-        return cy.get('.govuk-grid-column-two-thirds > p')
+        return cy.get('.govuk-hint')
     }
     getKeyStageFieldSetHeader() {
         return cy.get('.govuk-fieldset__heading')
@@ -14,5 +14,6 @@ class KeyStagePage {
     getKeyStageContinueButton() {
         return cy.get('.govuk-button')
     }
+    
 }
 export default KeyStagePage;
