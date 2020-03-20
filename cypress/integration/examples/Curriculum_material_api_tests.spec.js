@@ -30,7 +30,7 @@ describe('Validate that curriculum material api', function () {
         })
     })
 
-    it('Validate the unit details for the given CCP', () => {
+    it('Get the unit name for the given CCP', () => {
         ReusableMethod.sendRequest('/api/v1/ccps/1/units')
         cy.get('@herokuapi').then((response) => {
             response.body.forEach(ccp => {

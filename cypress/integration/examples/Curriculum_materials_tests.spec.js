@@ -155,20 +155,12 @@ describe('Validate user is able to view curriculum material', function () {
       reusableMethod.getFooterLogo().should('exist').children().should('exist')
          .next().should('exist')
    })
-   it.skip('Validate the user is able to view lessons header/unit ', function () {
+   it('Validate the user is able to view lessons header/unit ', function () {
       let units = []
-      /**
-       * Request from the API the units for this the selected CCP ID
-       */
-      let baseUrl = Cypress.env('baseUrl')
-      let endPoint = baseUrl + '/api/v1/ccps'
-      endPoint = endPoint + '/' + ccp.id + '/units'
-      cy.request({
-         url: endPoint,
-         headers: { Authorization: 'Bearer StQ85s7vzGaeaPV9bET7r8Zb' }
-      }).then(res => {
-         //cy.request(`/api/v1/ccps/${ccp.id}/units`).then(res => {
-         units = res.body
+      let endPoint = '/api/v1/ccps/' + ccp.id + '/units'
+      ReusableMethod.sendRequest(endPoint)
+      cy.get('@herokuapi').then((response) => {
+         units = response.body
          homePage.getStartButton().click()
          const servicePage = new SeviceDetailsPage()
          servicePage.getContinueButton().click()
@@ -213,7 +205,8 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it.skip('Validate the user is able to view "View and plan lessons" link associated to with each unit', function () {
+   it('Validate the user is able to view "View and plan lessons" link associated to with each unit', function () {
+      var $lessoncount = 0
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -222,9 +215,17 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click()
       const unitsPage = new UnitsPage()
       unitsPage.getUnitsName().each(($el, index, $list) => {
-         unitsPage.getViewandLessonPlanLink(index).then(function (linkName) {
-            var linktext = linkName.text()
-            expect(linktext).to.have.string(this.data.viewLessonPlanLink)
+         unitsPage.getLessonCount(index).then(function ($lessonCount) {
+            cy.log($lessonCount.text())
+            var count = $lessonCount.text().split(' ')[0]
+            $lessoncount = Number(count)
+            if ($lessoncount >= 1) {
+               unitsPage.getViewandLessonPlanLink(index).then(function (linkName) {
+                  var linktext = linkName.text()
+                  expect(linktext).to.have.string(this.data.viewLessonPlanLink)
+               })
+            }
+
          })
       })
    })
@@ -251,6 +252,25 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
+
+   it('Validate the user is able to navigate to next page once he clicks on "View and plan lessons" link', function () {
+      var actualLesonName
+      homePage.getStartButton().click()
+      const servicePage = new SeviceDetailsPage()
+      servicePage.getContinueButton().click()
+      const keyStagePage = new KeyStagePage()
+      keyStagePage.getKeyStageRadioButton().click()
+      keyStagePage.getKeyStageContinueButton().click()
+      cy.get('.card-with-lessons > .card-header > .card-header-title > h3').then(function (lessonName) {
+         actualLesonName = lessonName.text()
+      })
+      cy.get('.card-footer > .govuk-link').click()
+      cy.get('.govuk-heading-l').then(function (lessonNameExpected) {
+         expect(lessonNameExpected.text()).to.have.string(actualLesonName)
+      })
+   })
+
+
    it.skip('Validate the user is able to logout from the system', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
@@ -275,7 +295,7 @@ describe('Validate user is able to view curriculum material', function () {
       invitationPage.getInvitationLink().should('have.text', this.data.invitationEmail)
    })
 
-   it.skip('Validate the user is able to view the "View lesson" link against each lesson for each untit', function () {
+   it('Validate the user is able to view the "View lesson" link against each lesson for each untit', function () {
       homePage.getStartButton().click()
       const servicePage = new SeviceDetailsPage()
       servicePage.getContinueButton().click()
@@ -283,11 +303,10 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click()
       keyStagePage.getKeyStageContinueButton().click()
       const unitsPage = new UnitsPage()
-      unitsPage.getUnitName(1).then($el => {
+      unitsPage.getUnitName(3).then($el => {
          let heading = $el.text();
-         $el.click()
-         unitsPage.getUnitHeader().should('exist')
-         unitsPage.getUnitHeader().should('have.text', heading)
+         cy.log(heading)
+         cy.get('.card-footer > .govuk-link').click()
          unitsPage.getLearningObjectiveTable().each(($el, index, $list) => {
             unitsPage.getLearningObjectiveName(index).then(function (linkName) {
                unitsPage.getViewLessonLink(index).should('have.text', 'View lesson')
@@ -385,108 +404,10 @@ describe('Validate user is able to view curriculum material', function () {
       })
    })
 
-   it.skip('Validate the user is able to navigate to next page and bale to view lesson overview details if he third unit page', function () {
-      homePage.getStartButton().click()
-      const servicePage = new SeviceDetailsPage()
-      servicePage.getContinueButton().click()
-      const keyStagePage = new KeyStagePage()
-      keyStagePage.getKeyStageRadioButton().click()
-      keyStagePage.getKeyStageContinueButton().click()
-      const unitsPage = new UnitsPage()
-      if (unitsPage.getUnitCount() >= 3) {
-         unitsPage.getUnitName(3).then($el => {
-            let heading = $el.text()
-            $el.click()
-            cy.get('.govuk-heading-l').should('have.text', heading)
-            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-                  var learningObjective = learningobjective.text()
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-                  cy.get('#tab_lesson-contents').click()
-                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-                  cy.get('#tab_downloads').click()
-                  cy.get('#downloads > h2').should('have.text', 'Downloads')
-                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
-               })
-            })
-         })
-      }
-      else {
-         cy.log("Third unit page doesn't exist")
-      }
 
-   })
 
-   it.skip('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fourth unit page', function () {
-      homePage.getStartButton().click()
-      const servicePage = new SeviceDetailsPage()
-      servicePage.getContinueButton().click()
-      const keyStagePage = new KeyStagePage()
-      keyStagePage.getKeyStageRadioButton().click()
-      keyStagePage.getKeyStageContinueButton().click()
-      const unitsPage = new UnitsPage()
-      if (unitsPage.getUnitCount() >= 4) {
-         unitsPage.getUnitName(4).then($el => {
-            let heading = $el.text()
-            $el.click()
-            cy.get('.govuk-heading-l').should('have.text', heading)
-            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-                  var learningObjective = learningobjective.text()
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-                  cy.get('#tab_lesson-contents').click()
-                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-                  cy.get('#tab_downloads').click()
-                  cy.get('#downloads > h2').should('have.text', 'Downloads')
-                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
-               })
-            })
-         })
-      }
-      else {
-         cy.log("Fourth unit page doesn't exist")
-      }
-   })
 
-   it.skip('Validate the user is able to navigate to next page and bale to view lesson overview details if he is on fifth unit page', function () {
-      homePage.getStartButton().click()
-      const servicePage = new SeviceDetailsPage()
-      servicePage.getContinueButton().click()
-      const keyStagePage = new KeyStagePage()
-      keyStagePage.getKeyStageRadioButton().click()
-      keyStagePage.getKeyStageContinueButton().click()
-      const unitsPage = new UnitsPage()
-      if (unitsPage.getUnitCount() >= 5) {
-         unitsPage.getUnitName(5).then($el => {
-            let heading = $el.text()
-            $el.click()
-            cy.get('.govuk-heading-l').should('have.text', heading)
-            cy.get('.govuk-table__body > tr ').each(($el, index, $list) => {
-               cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(2):visible').then(function (learningobjective) {
-                  var learningObjective = learningobjective.text()
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').should('have.text', 'View lesson')
-                  cy.get('.govuk-table__body > :nth-child(' + (index + 1) + ') > :nth-child(4) > a').click()
-                  cy.get('.govuk-heading-l:visible').should('have.text', learningObjective)
-                  cy.get('#tab_lesson-contents').click()
-                  cy.get('#lesson-contents > h2').should('have.text', 'Lesson contents')
-                  cy.get('#tab_downloads').click()
-                  cy.get('#downloads > h2').should('have.text', 'Downloads')
-                  cy.get(':nth-child(2) > .govuk-breadcrumbs__link').click()
-               })
-            })
-         })
-      }
-      else {
-         cy.log("Fourth unit page doesn't exist")
-      }
-
-   })
-
-   it.skip("Validates the user is able to download the lesson plan", function () {
+   it("Validates the user is able to download the lesson plan", function () {
       HomePage.getStartButton()
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
@@ -494,7 +415,8 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
-      unitsPage.getUnitName(1).click();
+      //unitsPage.getUnitName(1).click();
+      cy.get('.card-footer > .govuk-link').click()
       unitsPage.getFirstViewLessonLink().click();
       var lessonNumbers
       unitsPage.getLessonNumber().then(function (lessonNumber) {
@@ -513,7 +435,7 @@ describe('Validate user is able to view curriculum material', function () {
          cy.get(".govuk-footer").should("not.exist");
          cy.get(".govuk-header").should("not.exist");
 
-         [("Understand the aims of the lesson", "Lesson contents")].forEach(
+         [("Contenders to the throne", "Understand the aims of the lesson", "Core knowledge for pupils", "Core knowledge for teachers", "Core knowledge for pupils", "Key vocabulary", "Common misconceptions", "Building on previous knowledge", "Understand and choose the lesson contents")].forEach(
             text => {
                cy.get(".govuk-grid-column-full h2").should("contain", text);
             }
@@ -521,12 +443,12 @@ describe('Validate user is able to view curriculum material', function () {
          /*["Core knowledge for teachers", "Vocabulary", "Common misconceptions", "Building on previous knowledge"].forEach(text => {
             cy.get(".govuk-grid-column-full .govuk-heading-m").should("contain", text);
          });*/
-         unitsPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
+         //unitsPage.getLessonNumberinPDFFile().should('have.text', lessonNumbers)
       });
 
    });
 
-   it.skip("Validates the user is able to see logo inside the downloaded lesson plan", function () {
+   it("Validates the user is able to see logo inside the downloaded lesson plan", function () {
       homePage.getStartButton().click();
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
@@ -534,7 +456,8 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
-      unitsPage.getUnitName(1).click();
+      //unitsPage.getUnitName(1).click();
+      cy.get('.card-footer > .govuk-link').click()
       unitsPage.getFirstViewLessonLink().click();
       unitsPage.getDownloadTab().click();
       unitsPage.getPrintLessonPlanLink().should("have.attr", "target", "_blank");
@@ -568,7 +491,7 @@ describe('Validate user is able to view curriculum material', function () {
       })
    });
 
-   it.skip("Validates the user is able to access all tabs on lesson overview page", function () {
+   it("Validates the user is able to access all tabs on lesson overview page", function () {
       homePage.getStartButton().click();
       const servicePage = new SeviceDetailsPage();
       servicePage.getContinueButton().click();
@@ -577,24 +500,20 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
       unitsPage.getLessonHeader().should('exist')
-      unitsPage.getLessonHeader().then(function (headerTest) {
-         unitsPage.getLessonHeader().click();
-         unitsPage.getUnitHeader().should('exist')
-         unitsPage.getUnitHeader().should('have.text', headerTest.text())
-         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
-         unitsPage.getViewLessonLink(1).click();
-         unitsPage.getknowledgeOverviewTab().should('exist')
-         unitsPage.getLessonContentLink().should('exist')
-         unitsPage.getLessonContentLink().click()
-         unitsPage.getLessonContentsTab().should('exist')
-         unitsPage.getDownloadsLink().should('exist')
-         unitsPage.getDownloadsLink().click()
-         unitsPage.getDownloadsHeader().should('exist')
-         unitsPage.getDownloadsSubHeader().should('exist')
-      })
+      cy.get('.card-footer > .govuk-link').click()
+      unitsPage.getViewLessonLink(1).click();
+      unitsPage.getknowledgeOverviewTab().should('exist')
+      unitsPage.getLessonContentLink().should('exist')
+      unitsPage.getLessonContentLink().click()
+      unitsPage.getLessonContentsTab().should('exist')
+      unitsPage.getDownloadsLink().should('exist')
+      unitsPage.getDownloadsLink().click()
+      unitsPage.getDownloadsHeader().should('exist')
+      unitsPage.getDownloadsSubHeader().should('exist')
+
    });
 
-   it.skip("Validates the user is able select the lesson as per his choice using change activity", function () {
+   it("Validates the user is able select the lesson as per his choice using change activity", function () {
       let locators = []
       var defaultSelector
       homePage.getStartButton().click();
@@ -604,12 +523,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
-      unitsPage.getLessonHeader().should('exist')
-      unitsPage.getLessonHeader().then(function (headerTest) {
-         unitsPage.getLessonHeader().click();
-         unitsPage.getUnitHeader().should('exist')
-         unitsPage.getUnitHeader().should('have.text', headerTest.text())
-         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+      cy.get('.card-footer > .govuk-link').click()
          unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
@@ -649,10 +563,10 @@ describe('Validate user is able to view curriculum material', function () {
                }
             })
          })
-      })
+      
    });
 
-   it.skip("Validates the user is able to see the content of the selected lesson on lesson contents page", function () {
+   it("Validates the user is able to see the content of the selected lesson on lesson contents page", function () {
       let locators = []
       var defaultSelector
       homePage.getStartButton().click();
@@ -663,11 +577,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
       unitsPage.getLessonHeader().should('exist')
-      unitsPage.getLessonHeader().then(function (headerTest) {
-         unitsPage.getLessonHeader().click();
-         unitsPage.getUnitHeader().should('exist')
-         unitsPage.getUnitHeader().should('have.text', headerTest.text())
-         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+      cy.get('.card-footer > .govuk-link').click()
          unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
@@ -709,9 +619,9 @@ describe('Validate user is able to view curriculum material', function () {
                }
             })
          })
-      })
+      
    });
-   it.skip("Validates the user is able to cancel the selected lesson if he wish to do so", function () {
+   it("Validates the user is able to cancel the selected lesson if he wish to do so", function () {
       let locators = []
       var defaultSelector
       homePage.getStartButton().click();
@@ -721,12 +631,7 @@ describe('Validate user is able to view curriculum material', function () {
       keyStagePage.getKeyStageRadioButton().click();
       keyStagePage.getKeyStageContinueButton().click();
       const unitsPage = new UnitsPage();
-      unitsPage.getLessonHeader().should('exist')
-      unitsPage.getLessonHeader().then(function (headerTest) {
-         unitsPage.getLessonHeader().click();
-         unitsPage.getUnitHeader().should('exist')
-         unitsPage.getUnitHeader().should('have.text', headerTest.text())
-         unitsPage.getCurrentUnitName().should('have.text', headerTest.text())
+      cy.get('.card-footer > .govuk-link').click()         
          unitsPage.getViewLessonLink(0).click();
          unitsPage.getknowledgeOverviewTab().should('exist')
          unitsPage.getLessonContentLink().should('exist')
@@ -766,7 +671,6 @@ describe('Validate user is able to view curriculum material', function () {
                   }
                }
             })
-         })
-      })
+         })      
    });
 })
