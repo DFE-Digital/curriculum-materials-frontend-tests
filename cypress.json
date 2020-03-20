@@ -3,7 +3,8 @@
   "pageLoadTimeout": 50000,
   "baseUrl": "https://curriculum-materials:curriculum-materials@dfe-curriculum-materials.herokuapp.com",
   "env": {
-    "baseUrl": "https://curriculum-materials:curriculum-materials@dfe-curriculum-materials.herokuapp.com",
+    "baseUrl_old": "https://curriculum-materials:curriculum-materials@dfe-curriculum-materials.herokuapp.com",
+    "baseUrl": "https://dfe-curriculum-materials.herokuapp.com",
     "url":"https://dfe-curriculum-materials.herokuapp.com/teachers/session/ff37bd17-42be-47ab-8141-2f5e3b7f2b7f",
     "url_base":"https://dfe-curriculum-materials.herokuapp.com",
     "url1":"https://dfe-curriculum-materials.herokuapp.com/teachers/complete_curriculum_programmes/1",

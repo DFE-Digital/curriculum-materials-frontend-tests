@@ -19,10 +19,10 @@ class HomePage {
     return cy.get('.govuk-grid-column-two-thirds > h3')
   }
   getBeforStartMessage() {
-    return cy.get('.govuk-grid-column-two-thirds > :nth-child(13)')
+    return cy.get('.govuk-grid-column-two-thirds > :nth-child(8)')
   }
   getBeforStartNextMessage() {
-    return cy.get(':nth-child(14) > :nth-child(1)')
+    return cy.get(':nth-child(9) > :nth-child(1)')
   }
 }
 export default HomePage;
