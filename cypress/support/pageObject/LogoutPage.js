@@ -1,6 +1,6 @@
 class LogoutPage {
     getLogoutButton() {
-        return cy.get('.govuk-link')
+        return cy.get('.button_to > .govuk-link')
     }
     getNextLogoutButton() {
         return cy.get('input.govuk-button')

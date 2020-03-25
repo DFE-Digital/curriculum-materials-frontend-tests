@@ -100,6 +100,10 @@ class UnitsPage {
     getDownloadsSubHeader() {
         return cy.get('.downloads > .govuk-heading-l')
     }
+    getChangeActivity() {
+        return cy.get(':nth-child(1) > .alternatives > .alternatives-list > a')
+    }
+    
 }
 export default UnitsPage;
 
